@@ -6,9 +6,29 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		291533401BD9AD19006F44F7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2915333F1BD9AD19006F44F7 /* main.cpp */; };
-/* End PBXBuildFile section */
+/* Begin PBXContainerItemProxy section */
+		291533611BD9AEC1006F44F7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2915335D1BD9AEC1006F44F7 /* Core.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2915334F1BD9AEC1006F44F7;
+			remoteInfo = Core;
+		};
+		2915336E1BD9B15A006F44F7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 291533691BD9B15A006F44F7 /* Boost.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2962E56E1B0DF71700FA6E0E;
+			remoteInfo = "Boost ios";
+		};
+		291533701BD9B15A006F44F7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 291533691BD9B15A006F44F7 /* Boost.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2962E5891B0DF73900FA6E0E;
+			remoteInfo = "Boost osx";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		2915333A1BD9AD19006F44F7 /* CopyFiles */ = {
@@ -24,7 +44,8 @@
 
 /* Begin PBXFileReference section */
 		2915333C1BD9AD19006F44F7 /* LocalStorage */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = LocalStorage; sourceTree = BUILT_PRODUCTS_DIR; };
-		2915333F1BD9AD19006F44F7 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		2915335D1BD9AEC1006F44F7 /* Core.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Core.xcodeproj; path = Core/Core.xcodeproj; sourceTree = "<group>"; };
+		291533691BD9B15A006F44F7 /* Boost.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Boost.xcodeproj; path = Submodules/boost/Boost.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +62,7 @@
 		291533331BD9AD19006F44F7 = {
 			isa = PBXGroup;
 			children = (
+				291533681BD9B104006F44F7 /* Submodules */,
 				2915333E1BD9AD19006F44F7 /* LocalStorage */,
 				2915333D1BD9AD19006F44F7 /* Products */,
 			);
@@ -57,9 +79,34 @@
 		2915333E1BD9AD19006F44F7 /* LocalStorage */ = {
 			isa = PBXGroup;
 			children = (
-				2915333F1BD9AD19006F44F7 /* main.cpp */,
+				2915335D1BD9AEC1006F44F7 /* Core.xcodeproj */,
 			);
 			path = LocalStorage;
+			sourceTree = "<group>";
+		};
+		2915335E1BD9AEC1006F44F7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				291533621BD9AEC1006F44F7 /* libCore.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		291533681BD9B104006F44F7 /* Submodules */ = {
+			isa = PBXGroup;
+			children = (
+				291533691BD9B15A006F44F7 /* Boost.xcodeproj */,
+			);
+			name = Submodules;
+			sourceTree = "<group>";
+		};
+		2915336A1BD9B15A006F44F7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2915336F1BD9B15A006F44F7 /* libBoost_ios.a */,
+				291533711BD9B15A006F44F7 /* libBoost_osx.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -106,6 +153,16 @@
 			mainGroup = 291533331BD9AD19006F44F7;
 			productRefGroup = 2915333D1BD9AD19006F44F7 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 2915336A1BD9B15A006F44F7 /* Products */;
+					ProjectRef = 291533691BD9B15A006F44F7 /* Boost.xcodeproj */;
+				},
+				{
+					ProductGroup = 2915335E1BD9AEC1006F44F7 /* Products */;
+					ProjectRef = 2915335D1BD9AEC1006F44F7 /* Core.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				2915333B1BD9AD19006F44F7 /* LocalStorage */,
@@ -113,12 +170,35 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXReferenceProxy section */
+		291533621BD9AEC1006F44F7 /* libCore.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libCore.a;
+			remoteRef = 291533611BD9AEC1006F44F7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2915336F1BD9B15A006F44F7 /* libBoost_ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libBoost_ios.a;
+			remoteRef = 2915336E1BD9B15A006F44F7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		291533711BD9B15A006F44F7 /* libBoost_osx.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libBoost_osx.a;
+			remoteRef = 291533701BD9B15A006F44F7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
 /* Begin PBXSourcesBuildPhase section */
 		291533381BD9AD19006F44F7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				291533401BD9AD19006F44F7 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,6 +317,7 @@
 				291533451BD9AD19006F44F7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

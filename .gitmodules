@@ -1,0 +1,3 @@
+[submodule "Submodules/boost"]
+	path = Submodules/boost
+	url = https://timur-losev@github.com/CatalystApps/libboost.git
