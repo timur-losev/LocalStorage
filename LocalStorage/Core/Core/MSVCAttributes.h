@@ -101,7 +101,7 @@ Weak symbols are supported for ELF targets, and also for a.out targets when usin
 
 #define _AttrConstructor 
 
-#define PBBuiltInConstant(x) 0
+#define FBuiltInConstant(x) 0
 
 #ifdef __cplusplus
 extern "C"

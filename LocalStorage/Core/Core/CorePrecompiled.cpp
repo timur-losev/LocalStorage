@@ -6,4 +6,4 @@
 //  Copyright © 2015 Timur Losev. All rights reserved.
 //
 
-#include "CorePrecompiled.hpp"
+#include "CorePrecompiled.h"

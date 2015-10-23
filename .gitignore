@@ -28,3 +28,9 @@
 *.app
 *.xcscheme
 xcschememanagement.plist
+*.ipch
+LocalStorage/Core/x64/
+x64/
+*.opensdf
+.vs/
+*.sdf

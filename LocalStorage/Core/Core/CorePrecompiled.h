@@ -7,3 +7,14 @@
 //
 
 #pragma once
+
+#include "LSPlatform.h"
+#include "LSCompileConfig.h"
+
+#include "LSStableHeaders.h"
+#include "LSBoostHeaders.h"
+#include "LSSharedPointer.h"
+#include "CoreHeaders.h"
+
+typedef std::function<void()> FVoidBlock_t;
+
