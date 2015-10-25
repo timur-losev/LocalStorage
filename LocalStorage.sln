@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Submodules", "Submodules", 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "boost", "Submodules\boost\boost.vcxproj", "{ED831A98-257C-455D-930E-07446093A667}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DB", "LocalStorage\DB\DB.vcxproj", "{E4A6F2CD-9A49-4635-A926-5062C015B916}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -43,6 +45,14 @@ Global
 		{ED831A98-257C-455D-930E-07446093A667}.Release|x64.Build.0 = Release|x64
 		{ED831A98-257C-455D-930E-07446093A667}.Release|x86.ActiveCfg = Release|Win32
 		{ED831A98-257C-455D-930E-07446093A667}.Release|x86.Build.0 = Release|Win32
+		{E4A6F2CD-9A49-4635-A926-5062C015B916}.Debug|x64.ActiveCfg = Debug|x64
+		{E4A6F2CD-9A49-4635-A926-5062C015B916}.Debug|x64.Build.0 = Debug|x64
+		{E4A6F2CD-9A49-4635-A926-5062C015B916}.Debug|x86.ActiveCfg = Debug|Win32
+		{E4A6F2CD-9A49-4635-A926-5062C015B916}.Debug|x86.Build.0 = Debug|Win32
+		{E4A6F2CD-9A49-4635-A926-5062C015B916}.Release|x64.ActiveCfg = Release|x64
+		{E4A6F2CD-9A49-4635-A926-5062C015B916}.Release|x64.Build.0 = Release|x64
+		{E4A6F2CD-9A49-4635-A926-5062C015B916}.Release|x86.ActiveCfg = Release|Win32
+		{E4A6F2CD-9A49-4635-A926-5062C015B916}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

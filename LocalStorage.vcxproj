@@ -96,11 +96,12 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_SCL_SECURE_NO_WARNINGS;_WIN32_WINNT=0x0501;BOOST_ALL_NO_LIB;BOOST_THREAD_BUILD_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>LocalStorage;Submodules\boost\boost\;LocalStorage\Core;LocalStorage\DB</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,6 +143,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="LocalStorage\main.cpp" />
+    <ClCompile Include="LocalStorage\Precompiled.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Precompiled.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LocalStorage\Precompiled.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="LocalStorage\Core\Core.vcxproj">
+      <Project>{ff852574-6a0e-4f61-a893-8949a4d00c69}</Project>
+    </ProjectReference>
+    <ProjectReference Include="LocalStorage\DB\DB.vcxproj">
+      <Project>{e4a6f2cd-9a49-4635-a926-5062c015b916}</Project>
+    </ProjectReference>
+    <ProjectReference Include="Submodules\boost\boost.vcxproj">
+      <Project>{ed831a98-257c-455d-930e-07446093a667}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
