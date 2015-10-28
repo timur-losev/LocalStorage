@@ -44,5 +44,7 @@ struct FTreeDescription
         dupKeys = oth.dupKeys;
         sectorSize = oth.sectorSize;
         comp = oth.comp;
+
+        return *this;
     }
 };
