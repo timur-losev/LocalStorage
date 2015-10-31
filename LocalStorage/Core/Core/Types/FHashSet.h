@@ -11,7 +11,7 @@ typename Hasher = std::hash<T>,
 typename Eq = std::equal_to<T>,
 typename A = FTLAllocator<T, FDefaultDeleter > >
 using FHashSet =
-#ifdef LS_USE_BOOST_CONTAINERS
+#if LS_USE_BOOST_CONTAINERS
     boost::unordered::unordered_set<T, Hasher, Eq, A>;
 #else
     std::unordered_set<T, Hasher, Eq, T>;
@@ -19,7 +19,7 @@ using FHashSet =
 
 #else
 
-#ifdef LS_USE_BOOST_CONTAINERS 
+#if LS_USE_BOOST_CONTAINERS 
     #define FHashSet boost::unordered::unordered_set 
 #else
     #define FHashSet std::unordered_set 

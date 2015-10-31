@@ -5,7 +5,7 @@
 
 template <typename T, typename A = FTLAllocator<T, FDefaultDeleter>>
 using FArray =
-#ifdef LS_USE_BOOST_CONTAINERS
+#if LS_USE_BOOST_CONTAINERS
     boost::container::vector<T, A>;
 #else
     std::vector<T, A>;
