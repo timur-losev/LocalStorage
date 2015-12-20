@@ -34,3 +34,9 @@ x64/
 *.opensdf
 .vs/
 *.sdf
+Android/boost/ARM/
+LocalStorage/Core/Debug/Core.idb
+*.VC.VC.opendb
+*.VC.db
+LocalStorage/Core/Debug/
+ARM/

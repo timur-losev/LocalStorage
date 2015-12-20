@@ -6,7 +6,6 @@
 #include <memory.h>
 #include <memory>
 #include <mutex>
-#include <shared_mutex>
 #include <vector>
 #include <list>
 #include <map>
@@ -21,6 +20,8 @@
 #include <stdio.h>
 #include <functional>
 #include <thread>
+
+#include <condition_variable>
 
 #include <unordered_map>
 #include <unordered_set>

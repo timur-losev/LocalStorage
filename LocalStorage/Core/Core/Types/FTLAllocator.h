@@ -147,7 +147,7 @@ public:
     {
         delete_policy::destroy(ptr);
     }
-#if 0
+#if 1
     template <typename... Args>
     void construct(T* ptr, Args&&... args)
     {

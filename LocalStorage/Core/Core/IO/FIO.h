@@ -8,21 +8,26 @@
 
 #pragma once
 
-namespace FIO = boost::asio;
-typedef FIO::ip::tcp FTcp_t;
+namespace PBIO = boost::asio;
+typedef PBIO::ip::tcp FTcp_t;
 typedef FTcp_t::socket FSocket_t;
-typedef FIO::io_service FIOContext_t;
+typedef PBIO::io_service FIOContext_t;
 typedef FIOContext_t::work FIOContextRetainer_t;
 typedef boost::system::error_code FErrorCode_t;
 typedef THREAD_PROVIDER::thread  FThread_t;
 typedef THREAD_PROVIDER::mutex FMutex_t;
+typedef THREAD_PROVIDER::recursive_mutex FRecursiveMutex_t;
+typedef THREAD_PROVIDER::condition_variable FConditionVariable_t;
 namespace FThisThread = THREAD_PROVIDER::this_thread;
 
-// typedef std::shared_mutex FSharedMutex; //since 2017. if we really require it, we should use boost::thread
-// typedef std::unique_lock<FSharedMutex> FWriteLock;
-// typedef std::shared_lock<FSharedMutex> FReadLock;
+// in std since 2017. if we really require it, we probably have to use boost::thread
+typedef boost::shared_mutex FSharedMutex_t;
+typedef boost::unique_lock<FSharedMutex_t> FWriteLock_t;
+typedef boost::shared_lock<FSharedMutex_t> FReadLock_t;
 
+typedef THREAD_PROVIDER::unique_lock<FMutex_t> FUniqueLock_t;
 typedef THREAD_PROVIDER::lock_guard<FMutex_t> FLockGuard_t;
+typedef THREAD_PROVIDER::lock_guard<FRecursiveMutex_t> FRecursiveLockGuard_t;
 
 typedef FSharedPtr<FThread_t> FThreadPtr_t;
 typedef boost::asio::deadline_timer FDeadlineTimer_t;
@@ -30,4 +35,4 @@ typedef boost::asio::deadline_timer FDeadlineTimer_t;
 namespace FFileSystem = boost::filesystem;
 typedef FFileSystem::path FPath_t;
 
-bool FCheckIOError(const FErrorCode_t& ec);
+extern bool FCheckIOError(const FErrorCode_t& ec);

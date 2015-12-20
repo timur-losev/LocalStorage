@@ -1,7 +1,7 @@
 #include "Precompiled.h"
 //#include "DB/BTree/BTree.h"
 
-#if 0
+#if 1
 struct BTreeNode
 {
     int data[5] = { 0 };
@@ -23,7 +23,7 @@ struct BTreeNode
 };
 
 BTreeNode* root = nullptr;
-//BTreeNode* currentNode = nullptr;
+BTreeNode* currentNode = nullptr;
 
 int splitChild(BTreeNode* node, int i)
 {
@@ -408,32 +408,32 @@ bErrType bFindPrevKey(bHandleType handle, void *key, eAdrType *rec);
 /* based on k = &[key,rec,childGE] */
 #define childLT(k) bAdr((char *)k - sizeof(bAdrType))
 #define key(k) (k)
-#define rec(k) eAdr((char *)(k) + h->keySize)
-#define childGE(k) bAdr((char *)(k) + h->keySize + sizeof(eAdrType))
+#define rec(k) eAdr((char *)(k) + currentNode->keySize)
+#define childGE(k) bAdr((char *)(k) + currentNode->keySize + sizeof(eAdrType))
 
 /* based on b = &bufType */
 #define leaf(b) b->locationInMemory->leaf
-#define ct(b) b->locationInMemory->ct
+#define ct(b) b->locationInMemory->countOfKeysPresent
 #define next(b) b->locationInMemory->next
 #define prev(b) b->locationInMemory->prev
-#define fkey(b) &b->locationInMemory->fkey
+#define fkey(b) &b->locationInMemory->firstKeyOccurrence
 #define lkey(b) (fkey(b) + ks((ct(b) - 1)))
 #define p(b) (char *)(b->locationInMemory)
 
 /* shortcuts */
-#define ks(ct) ((ct) * h->sizeOfKeyEntry)
+#define ks(ct) ((ct) * currentNode->sizeOfKeyEntry)
 
 typedef char keyType;           /* keys entries are treated as char arrays */
 
 struct nodeType 
 {
     uint32_t leaf : 1;        /* first bit = 1 if leaf */
-    uint32_t ct : 15;         /* count of keys present */
+    uint32_t countOfKeysPresent : 15;         /* count of keys present */
     bAdrType prev;              /* prev node in sequence (leaf) */
     bAdrType next;              /* next node in sequence (leaf) */
     bAdrType childLT;           /* child LT first key */
                                 /* ct occurrences of [key,rec,childGE] */
-    keyType fkey;               /* first occurrence */
+    keyType firstKeyOccurrence;               /* first occurrence */
 };
 
 struct bufType
@@ -469,7 +469,7 @@ struct hNode
 };
 
 static hNode hList;             /* list of hNodes */
-static hNode *h;                /* current hNode */
+static hNode *currentNode;                /* current hNode */
 
 #define error(rc) lineError(__LINE__, rc)
 
@@ -484,8 +484,8 @@ static bErrType lineError(int lineno, bErrType rc)
 static bAdrType allocAdr(void)
 {
     bAdrType adr;
-    adr = h->nextFreeAdr;
-    h->nextFreeAdr += h->sectorSize;
+    adr = currentNode->nextFreeAdr;
+    currentNode->nextFreeAdr += currentNode->sectorSize;
     return adr;
 }
 
@@ -494,14 +494,14 @@ static bErrType flush(bufType *buf)
     int len;            /* number of bytes to write */
 
                         /* flush buffer to disk */
-    len = h->sectorSize;
+    len = currentNode->sectorSize;
 
     if (buf->adr == 0)
         len *= 3;        /* root */
 
-    if (fseek(h->fp, buf->adr, SEEK_SET))
+    if (fseek(currentNode->fp, buf->adr, SEEK_SET))
         return error(bErrIO);
-    if (fwrite(buf->locationInMemory, len, 1, h->fp) != 1)
+    if (fwrite(buf->locationInMemory, len, 1, currentNode->fp) != 1)
         return error(bErrIO);
 
     buf->modified = false;
@@ -514,13 +514,13 @@ static bErrType flushAll(void)
     bErrType rc;                /* return code */
     bufType *buf;               /* buffer */
 
-    if (h->root.modified)
-        if ((rc = flush(&h->root)) != 0) 
+    if (currentNode->root.modified)
+        if ((rc = flush(&currentNode->root)) != 0) 
             return rc;
 
-    buf = h->bufList.next;
+    buf = currentNode->bufList.next;
 
-    while (buf != &h->bufList)
+    while (buf != &currentNode->bufList)
     {
         if (buf->modified)
             if ((rc = flush(buf)) != 0)
@@ -539,13 +539,13 @@ static bErrType assignBuf(bAdrType adr, bufType **b)
 
     if (adr == 0)
     {
-        *b = &h->root;
+        *b = &currentNode->root;
         return bErrOk;
     }
 
     /* search for buf with matching adr */
-    buf = h->bufList.next;
-    while (buf->next != &h->bufList)
+    buf = currentNode->bufList.next;
+    while (buf->next != &currentNode->bufList)
     {
         if (buf->valid && buf->adr == adr) 
             break;
@@ -575,8 +575,8 @@ static bErrType assignBuf(bAdrType adr, bufType **b)
     /* remove from current position and place at front of list */
     buf->next->prev = buf->prev;
     buf->prev->next = buf->next;
-    buf->next = h->bufList.next;
-    buf->prev = &h->bufList;
+    buf->next = currentNode->bufList.next;
+    buf->prev = &currentNode->bufList;
     buf->next->prev = buf;
     buf->prev->next = buf;
     *b = buf;
@@ -602,14 +602,14 @@ static bErrType readDisk(bAdrType adr, bufType **b)
         return rc;
     if (!buf->valid)
     {
-        len = h->sectorSize;
+        len = currentNode->sectorSize;
         if (adr == 0) 
             len *= 3;         /* root */
 
-        if (fseek(h->fp, adr, SEEK_SET)) 
+        if (fseek(currentNode->fp, adr, SEEK_SET)) 
             return error(bErrIO);
 
-        if (fread(buf->locationInMemory, len, 1, h->fp) != 1)
+        if (fread(buf->locationInMemory, len, 1, currentNode->fp) != 1)
             return error(bErrIO);
 
         buf->modified = false;
@@ -637,49 +637,47 @@ static int search(bufType *buf, void *key, eAdrType rec, keyType **mkey, modeEnu
     *   CC_GT                  key > mkey
     */
     int cc;                     /* condition code */
-    int m;                      /* midpoint of search */
-    int lb;                     /* lower-bound of binary search */
-    int ub;                     /* upper-bound of binary search */
+    int midpointOfSearch = 0;   /* midpoint of search */
     bool foundDup;              /* true if found a duplicate key */
 
                                 /* scan current node for key using binary search */
     foundDup = false;
-    lb = 0;
-    ub = ct(buf) - 1;
-    while (lb <= ub)
+    int lowerBound = 0;
+    int upperBound = buf->locationInMemory->countOfKeysPresent - 1;
+    while (lowerBound <= upperBound)
     {
-        m = (lb + ub) / 2;
-        *mkey = fkey(buf) + ks(m);
-        cc = h->comp(key, key(*mkey));
+        midpointOfSearch = (lowerBound + upperBound) / 2;
+        *mkey = &buf->locationInMemory->firstKeyOccurrence + midpointOfSearch * currentNode->sizeOfKeyEntry;
+        cc = currentNode->comp(key, *mkey);
 
         if (cc < 0)
             /* key less than key[m] */
-            ub = m - 1;
+            upperBound = midpointOfSearch - 1;
         else if (cc > 0)
             /* key greater than key[m] */
-            lb = m + 1;
+            lowerBound = midpointOfSearch + 1;
         else 
         {
             /* keys match */
-            if (h->dupKeys)
+            if (currentNode->dupKeys)
             {
                 switch (mode)
                 {
                 case MODE_FIRST:
                     /* backtrack to first key */
-                    ub = m - 1;
+                    upperBound = midpointOfSearch - 1;
                     foundDup = true;
                     break;
                 case MODE_MATCH:
                     /* rec's must also match */
                     if (rec < rec(*mkey))
                     {
-                        ub = m - 1;
+                        upperBound = midpointOfSearch - 1;
                         cc = CC_LT;
                     }
                     else if (rec > rec(*mkey))
                     {
-                        lb = m + 1;
+                        lowerBound = midpointOfSearch + 1;
                         cc = CC_GT;
                     }
                     else
@@ -695,13 +693,15 @@ static int search(bufType *buf, void *key, eAdrType rec, keyType **mkey, modeEnu
             }
         }
     }
-    if (ct(buf) == 0)
+
+    if (buf->locationInMemory->countOfKeysPresent == 0)
     {
         /* empty list */
-        *mkey = fkey(buf);
+        *mkey = &buf->locationInMemory->firstKeyOccurrence;
         return CC_LT;
     }
-    if (h->dupKeys && (mode == MODE_FIRST) && foundDup)
+
+    if (currentNode->dupKeys && (mode == MODE_FIRST) && foundDup)
     {
         /* next key is first key in set of duplicates */
         *mkey += ks(1);
@@ -718,8 +718,8 @@ static bErrType scatterRoot(void)
 
     /* scatter gbuf to root */
 
-    root = &h->root;
-    gbuf = &h->gatherBuffer;
+    root = &currentNode->root;
+    gbuf = &currentNode->gatherBuffer;
     FMemory::memcpy(fkey(root), fkey(gbuf), ks(ct(gbuf)));
     childLT(fkey(root)) = childLT(fkey(gbuf));
     ct(root) = ct(gbuf);
@@ -756,7 +756,7 @@ static bErrType scatter(bufType *pbuf, keyType *pkey, int is, bufType **tmp)
 
     /* scatter gbuf to tmps, placing 3/4 max in each tmp */
 
-    gbuf = &h->gatherBuffer;
+    gbuf = &currentNode->gatherBuffer;
     gkey = fkey(gbuf);
     ct = ct(gbuf);
 
@@ -769,19 +769,19 @@ static bErrType scatter(bufType *pbuf, keyType *pkey, int is, bufType **tmp)
     if (leaf(gbuf))
     {
         /* minus 1 to allow for insertion */
-        k0Max = h->maximumNumberOfKeysInANode - 1;
-        knMax = h->maximumNumberOfKeysInANode - 1;
+        k0Max = currentNode->maximumNumberOfKeysInANode - 1;
+        knMax = currentNode->maximumNumberOfKeysInANode - 1;
         /* plus 1 to allow for deletion */
-        k0Min = (h->maximumNumberOfKeysInANode / 2) + 1;
-        knMin = (h->maximumNumberOfKeysInANode / 2) + 1;
+        k0Min = (currentNode->maximumNumberOfKeysInANode / 2) + 1;
+        knMin = (currentNode->maximumNumberOfKeysInANode / 2) + 1;
     }
     else 
     {
         /* can hold an extra gbuf key as it's translated to a LT pointer */
-        k0Max = h->maximumNumberOfKeysInANode - 1;
-        knMax = h->maximumNumberOfKeysInANode;
-        k0Min = (h->maximumNumberOfKeysInANode / 2) + 1;
-        knMin = ((h->maximumNumberOfKeysInANode + 1) / 2) + 1;
+        k0Max = currentNode->maximumNumberOfKeysInANode - 1;
+        knMax = currentNode->maximumNumberOfKeysInANode;
+        k0Min = (currentNode->maximumNumberOfKeysInANode / 2) + 1;
+        knMin = ((currentNode->maximumNumberOfKeysInANode + 1) / 2) + 1;
     }
 
     /* calculate iu, number of tmps to use */
@@ -951,9 +951,9 @@ static bErrType gatherRoot(void)
     bufType *root;
 
     /* gather root to gbuf */
-    root = &h->root;
-    gbuf = &h->gatherBuffer;
-    FMemory::memcpy(p(gbuf), root->locationInMemory, 3 * h->sectorSize);
+    root = &currentNode->root;
+    gbuf = &currentNode->gatherBuffer;
+    FMemory::memcpy(p(gbuf), root->locationInMemory, 3 * currentNode->sectorSize);
     leaf(gbuf) = leaf(root);
     ct(root) = 0;
     return bErrOk;
@@ -994,7 +994,7 @@ static bErrType gather(bufType *pbuf, keyType **pkey, bufType **tmp)
         return rc;
 
     /* gather nodes to gbuf */
-    gbuf = &h->gatherBuffer;
+    gbuf = &currentNode->gatherBuffer;
     gkey = fkey(gbuf);
 
     /* tmp[0] */
@@ -1052,18 +1052,18 @@ bErrType bOpen(const bOpenType& info, bHandleType *handle)
     if (maximumNumberOfKeysInANode < 6) return bErrSectorSize;
 
     /* copy parms to hNode */
-    if ((h = (hNode*)FMemory::malloc(sizeof(hNode))) == NULL)
+    if ((currentNode = (hNode*)FMemory::malloc(sizeof(hNode))) == NULL)
         return error(bErrMemory);
 
-    FMemory::memset(h, 0, sizeof(hNode));
-    h->keySize = info.keySize;
-    h->dupKeys = info.dupKeys;
-    h->sectorSize = info.sectorSize;
-    h->comp = info.comp;
+    FMemory::memset(currentNode, 0, sizeof(hNode));
+    currentNode->keySize = info.keySize;
+    currentNode->dupKeys = info.dupKeys;
+    currentNode->sectorSize = info.sectorSize;
+    currentNode->comp = info.comp;
 
     /* childLT, key, rec */
-    h->sizeOfKeyEntry = sizeof(bAdrType) + h->keySize + sizeof(eAdrType);
-    h->maximumNumberOfKeysInANode = maximumNumberOfKeysInANode;
+    currentNode->sizeOfKeyEntry = sizeof(bAdrType) + currentNode->keySize + sizeof(eAdrType);
+    currentNode->maximumNumberOfKeysInANode = maximumNumberOfKeysInANode;
 
     /* Allocate buflist.
     * During insert/delete, need simultaneous access to 7 buffers:
@@ -1073,11 +1073,11 @@ bErrType bOpen(const bOpenType& info, bHandleType *handle)
     *  - 1 lastGE
     */
     numberOfTmpBuffers = 7;
-    h->bufLists.resize(numberOfTmpBuffers);
+    currentNode->bufLists.resize(numberOfTmpBuffers);
 
     for (uint32_t i = 0; i < numberOfTmpBuffers; ++i)
     {
-        h->bufLists[i] = new bufType();// static_cast<bufType*>(FMemory::malloc(sizeof(bufType)));
+        currentNode->bufLists[i] = new bufType();// static_cast<bufType*>(FMemory::malloc(sizeof(bufType)));
     }
 
     /*
@@ -1088,109 +1088,109 @@ bErrType bOpen(const bOpenType& info, bHandleType *handle)
     *  - 1 buffer for gatherBuffer, size 3*sectorsize + 2 extra keys
     *    to allow for LT pointers in last 2 nodes when gathering 3 full nodes
     */
-    const size_t malloc2Size = (numberOfTmpBuffers + 6) * h->sectorSize + 2 * h->sizeOfKeyEntry;
-    if ((h->malloc2 = FMemory::malloc(malloc2Size)) == NULL)
+    const size_t malloc2Size = (numberOfTmpBuffers + 6) * currentNode->sectorSize + 2 * currentNode->sizeOfKeyEntry;
+    if ((currentNode->malloc2 = FMemory::malloc(malloc2Size)) == NULL)
         return error(bErrMemory);
-    p = (nodeType *)h->malloc2;
+    p = (nodeType *)currentNode->malloc2;
 
     /* initialize buflist */
-    h->bufList.next = h->bufLists[0];
-    h->bufList.prev = h->bufLists[h->bufLists.size() - 1];
+    currentNode->bufList.next = currentNode->bufLists[0];
+    currentNode->bufList.prev = currentNode->bufLists[currentNode->bufLists.size() - 1];
     for (uint32_t i = 0; i < numberOfTmpBuffers; i++)
     {
-        h->bufLists[i]->next = (i + 1) >= numberOfTmpBuffers ? nullptr : h->bufLists[i + 1];
-        h->bufLists[i]->prev = i == 0 ? nullptr : h->bufLists[i - 1];
-        h->bufLists[i]->modified = false;
-        h->bufLists[i]->valid = false;
-        h->bufLists[i]->locationInMemory = p;
-        p = (nodeType *)((char *)p + h->sectorSize);
+        currentNode->bufLists[i]->next = (i + 1) >= numberOfTmpBuffers ? nullptr : currentNode->bufLists[i + 1];
+        currentNode->bufLists[i]->prev = i == 0 ? nullptr : currentNode->bufLists[i - 1];
+        currentNode->bufLists[i]->modified = false;
+        currentNode->bufLists[i]->valid = false;
+        currentNode->bufLists[i]->locationInMemory = p;
+        p = (nodeType *)((char *)p + currentNode->sectorSize);
     }
-    h->bufList.next->prev = &h->bufList;
-    h->bufList.prev->next = &h->bufList;
+    currentNode->bufList.next->prev = &currentNode->bufList;
+    currentNode->bufList.prev->next = &currentNode->bufList;
 
     /* initialize root */
-    bufType *root = &h->root;
+    bufType *root = &currentNode->root;
     root->locationInMemory = p;
-    p = (nodeType *)((char *)p + 3 * h->sectorSize);
-    h->gatherBuffer.locationInMemory = p;      /* done last to include extra 2 keys */
+    p = (nodeType *)((char *)p + 3 * currentNode->sectorSize);
+    currentNode->gatherBuffer.locationInMemory = p;      /* done last to include extra 2 keys */
 
-    h->curBuf = NULL;
-    h->curKey = NULL;
+    currentNode->curBuf = NULL;
+    currentNode->curKey = NULL;
 
     /* initialize root */
-    if ((h->fp = fopen(info.iName, "r+b")) != NULL)
+    if ((currentNode->fp = fopen(info.iName, "r+b")) != NULL)
     {
         /* open an existing database */
         if ((rc = readDisk(0, &root)) != 0) 
             return rc;
-        if (fseek(h->fp, 0, SEEK_END))
+        if (fseek(currentNode->fp, 0, SEEK_END))
             return error(bErrIO);
 
-        if ((h->nextFreeAdr = ftell(h->fp)) == -1)
+        if ((currentNode->nextFreeAdr = ftell(currentNode->fp)) == -1)
             return error(bErrIO);
     }
-    else if ((h->fp = fopen(info.iName, "w+b")) != NULL)
+    else if ((currentNode->fp = fopen(info.iName, "w+b")) != NULL)
     {
         /* initialize root */
-        FMemory::memset(root->locationInMemory, 0, 3 * h->sectorSize);
+        FMemory::memset(root->locationInMemory, 0, 3 * currentNode->sectorSize);
         leaf(root) = 1;
-        h->nextFreeAdr = 3 * h->sectorSize;
+        currentNode->nextFreeAdr = 3 * currentNode->sectorSize;
     }
     else 
     {
         /* something's wrong */
-        FMemory::free(h);
+        FMemory::free(currentNode);
         return bErrFileNotOpen;
     }
 
     /* append node to hList */
     if (hList.next)
     {
-        h->prev = hList.next;
-        h->next = &hList;
-        h->prev->next = h;
-        h->next->prev = h;
+        currentNode->prev = hList.next;
+        currentNode->next = &hList;
+        currentNode->prev->next = currentNode;
+        currentNode->next->prev = currentNode;
     }
     else
     {
         /* first item in hList */
-        h->prev = h->next = &hList;
-        hList.next = hList.prev = h;
+        currentNode->prev = currentNode->next = &hList;
+        hList.next = hList.prev = currentNode;
     }
 
-    *handle = h;
+    *handle = currentNode;
     return bErrOk;
 }
 
 
 bErrType bClose(bHandleType handle)
 {
-    h = (hNode*)handle;
+    currentNode = (hNode*)handle;
 
-    if (h == NULL) 
+    if (currentNode == NULL) 
         return bErrOk;
 
     /* remove from list */
-    if (h->next)
+    if (currentNode->next)
     {
-        h->next->prev = h->prev;
-        h->prev->next = h->next;
+        currentNode->next->prev = currentNode->prev;
+        currentNode->prev->next = currentNode->next;
     }
 
     /* flush idx */
-    if (h->fp)
+    if (currentNode->fp)
     {
         flushAll();
-        fclose(h->fp);
+        fclose(currentNode->fp);
     }
 
-    if (h->malloc2) 
-        FMemory::free(h->malloc2);
+    if (currentNode->malloc2) 
+        FMemory::free(currentNode->malloc2);
 
 //     if (h->malloc1)
 //         FMemory::free(h->malloc1);
 
-    FMemory::free(h);
+    FMemory::free(currentNode);
     return bErrOk;
 }
 
@@ -1200,8 +1200,8 @@ bErrType bFindKey(bHandleType handle, void *key, eAdrType *rec)
     bufType *buf;               /* buffer */
     bErrType rc;                /* return code */
 
-    h = (hNode*)handle;
-    buf = &h->root;
+    currentNode = (hNode*)handle;
+    buf = &currentNode->root;
 
     /* find key, and return address */
     while (1)
@@ -1211,7 +1211,7 @@ bErrType bFindKey(bHandleType handle, void *key, eAdrType *rec)
             if (search(buf, key, 0, &mkey, MODE_FIRST) == 0) 
             {
                 *rec = rec(mkey);
-                h->curBuf = buf; h->curKey = mkey;
+                currentNode->curBuf = buf; currentNode->curKey = mkey;
                 return bErrOk;
             }
             else
@@ -1238,7 +1238,7 @@ bErrType bFindKey(bHandleType handle, void *key, eAdrType *rec)
 bErrType bInsertKey(bHandleType handle, void *key, eAdrType rec) 
 {
     bErrType rc;                     /* return code */
-    keyType *mkey;              /* match key */
+    keyType *matchKey = nullptr;              /* match key */
     int len;                    /* length to shift */
     int cc;                     /* condition code */
     bufType *buf, *root;
@@ -1250,13 +1250,13 @@ bErrType bInsertKey(bHandleType handle, void *key, eAdrType rec)
     unsigned int lastGEkey;     /* last childGE key traversed */
     int height;                 /* height of tree */
 
-    h = (hNode*)handle;
-    root = &h->root;
+    currentNode = (hNode*)handle;
+    root = &currentNode->root;
     lastGEvalid = false;
     lastLTvalid = false;
 
     /* check for full root */
-    if (ct(root) == 3 * h->maximumNumberOfKeysInANode) 
+    if (root->locationInMemory->countOfKeysPresent == 3 * currentNode->maximumNumberOfKeysInANode) 
     {
         /* gather root and scatter to 4 bufs */
         /* this increases b-tree height by 1 */
@@ -1268,42 +1268,44 @@ bErrType bInsertKey(bHandleType handle, void *key, eAdrType rec)
 
     buf = root;
     height = 0;
-    while (1)
+    while (true)
     {
-        if (leaf(buf))
+        if (buf->locationInMemory->leaf)
         {
             /* in leaf, and there' room guaranteed */
 
-            if (height > maxHeight) maxHeight = height;
+            if (height > maxHeight) 
+                maxHeight = height;
 
             /* set mkey to point to insertion point */
-            switch (search(buf, key, rec, &mkey, MODE_MATCH))
+            switch (search(buf, key, rec, &matchKey, MODE_MATCH))
             {
             case CC_LT:  /* key < mkey */
-                if (!h->dupKeys && h->comp(key, mkey) == CC_EQ)
+                if (!currentNode->dupKeys && currentNode->comp(key, matchKey) == CC_EQ)
                     return bErrDupKeys;
                 break;
             case CC_EQ:  /* key = mkey */
                 return bErrDupKeys;
                 break;
             case CC_GT:  /* key > mkey */
-                if (!h->dupKeys && h->comp(key, mkey) == CC_EQ)
+                if (!currentNode->dupKeys && currentNode->comp(key, matchKey) == CC_EQ)
                     return bErrDupKeys;
-                mkey += ks(1);
+                matchKey += currentNode->sizeOfKeyEntry;
                 break;
             }
 
             /* shift items GE key to right */
-            keyOff = mkey - fkey(buf);
-            len = ks(ct(buf)) - keyOff;
+            keyOff = matchKey - &buf->locationInMemory->firstKeyOccurrence;
+            len = buf->locationInMemory->countOfKeysPresent * currentNode->sizeOfKeyEntry - keyOff;
             if (len) 
-                FMemory::memmove(mkey + ks(1), mkey, len);
+                FMemory::memmove(matchKey + currentNode->sizeOfKeyEntry, matchKey, len);
 
             /* insert new key */
-            FMemory::memcpy(key(mkey), key, h->keySize);
-            
-            rec(mkey) = rec;
-            childGE(mkey) = 0;
+            FMemory::memcpy(matchKey, key, currentNode->keySize);
+
+            *(eAdrType *)((char *)(matchKey)+currentNode->keySize) = rec;
+            //rec(matchKey) = rec;
+            childGE(matchKey) = 0;
             ct(buf)++;
 
             if ((rc = writeDisk(buf)) != 0) 
@@ -1318,7 +1320,7 @@ bErrType bInsertKey(bHandleType handle, void *key, eAdrType rec)
                     return rc;
 
                 tkey = fkey(tbuf) + lastGEkey;
-                FMemory::memcpy(key(tkey), key, h->keySize);
+                FMemory::memcpy(key(tkey), key, currentNode->keySize);
                 rec(tkey) = rec;
                 if ((rc = writeDisk(tbuf)) != 0) 
                     return rc;
@@ -1334,46 +1336,46 @@ bErrType bInsertKey(bHandleType handle, void *key, eAdrType rec)
             height++;
 
             /* read child */
-            if ((cc = search(buf, key, rec, &mkey, MODE_MATCH)) < 0)
+            if ((cc = search(buf, key, rec, &matchKey, MODE_MATCH)) < 0)
             {
-                if ((rc = readDisk(childLT(mkey), &cbuf)) != 0) 
+                if ((rc = readDisk(childLT(matchKey), &cbuf)) != 0) 
                     return rc;
             }
             else
             {
-                if ((rc = readDisk(childGE(mkey), &cbuf)) != 0) 
+                if ((rc = readDisk(childGE(matchKey), &cbuf)) != 0) 
                     return rc;
             }
 
             /* check for room in child */
-            if (ct(cbuf) == h->maximumNumberOfKeysInANode) 
+            if (ct(cbuf) == currentNode->maximumNumberOfKeysInANode) 
             {
 
                 /* gather 3 bufs and scatter */
-                if ((rc = gather(buf, &mkey, tmp)) != 0) 
+                if ((rc = gather(buf, &matchKey, tmp)) != 0) 
                     return rc;
-                if ((rc = scatter(buf, mkey, 3, tmp)) != 0) 
+                if ((rc = scatter(buf, matchKey, 3, tmp)) != 0) 
                     return rc;
 
                 /* read child */
-                if ((cc = search(buf, key, rec, &mkey, MODE_MATCH)) < 0) 
+                if ((cc = search(buf, key, rec, &matchKey, MODE_MATCH)) < 0) 
                 {
-                    if ((rc = readDisk(childLT(mkey), &cbuf)) != 0) 
+                    if ((rc = readDisk(childLT(matchKey), &cbuf)) != 0) 
                         return rc;
                 }
                 else 
                 {
-                    if ((rc = readDisk(childGE(mkey), &cbuf)) != 0) 
+                    if ((rc = readDisk(childGE(matchKey), &cbuf)) != 0) 
                         return rc;
                 }
             }
 
-            if (cc >= 0 || mkey != fkey(buf))
+            if (cc >= 0 || matchKey != fkey(buf))
             {
                 lastGEvalid = true;
                 lastLTvalid = false;
                 lastGE = buf->adr;
-                lastGEkey = mkey - fkey(buf);
+                lastGEkey = matchKey - fkey(buf);
                 if (cc < 0) lastGEkey -= ks(1);
             }
             else 
@@ -1403,9 +1405,9 @@ bErrType bDeleteKey(bHandleType handle, void *key, eAdrType *rec)
     bufType *root;
     bufType *gbuf;
 
-    h = (hNode*)handle;
-    root = &h->root;
-    gbuf = &h->gatherBuffer;
+    currentNode = (hNode*)handle;
+    root = &currentNode->root;
+    gbuf = &currentNode->gatherBuffer;
     lastGEvalid = false;
     lastLTvalid = false;
 
@@ -1440,7 +1442,7 @@ bErrType bDeleteKey(bHandleType handle, void *key, eAdrType *rec)
                     return rc;
                 tkey = fkey(tbuf) + lastGEkey;
 
-                FMemory::memcpy(key(tkey), mkey, h->keySize);
+                FMemory::memcpy(key(tkey), mkey, currentNode->keySize);
 
                 rec(tkey) = rec(mkey);
 
@@ -1468,7 +1470,7 @@ bErrType bDeleteKey(bHandleType handle, void *key, eAdrType *rec)
             }
 
             /* check for room to delete */
-            if (ct(cbuf) == h->maximumNumberOfKeysInANode / 2)
+            if (ct(cbuf) == currentNode->maximumNumberOfKeysInANode / 2)
             {
 
                 /* gather 3 bufs and scatter */
@@ -1478,7 +1480,7 @@ bErrType bDeleteKey(bHandleType handle, void *key, eAdrType *rec)
                 /* if last 3 bufs in root, and count is low enough... */
                 if (buf == root
                     && ct(root) == 2
-                    && ct(gbuf) < (3 * (3 * h->maximumNumberOfKeysInANode)) / 4)
+                    && ct(gbuf) < (3 * (3 * currentNode->maximumNumberOfKeysInANode)) / 4)
                 {
                     /* collapse tree by one level */
                     scatterRoot();
@@ -1524,8 +1526,8 @@ bErrType bFindFirstKey(bHandleType handle, void *key, eAdrType *rec)
     bErrType rc;                /* return code */
     bufType *buf;               /* buffer */
 
-    h = (hNode*)handle;
-    buf = &h->root;
+    currentNode = (hNode*)handle;
+    buf = &currentNode->root;
     while (!leaf(buf))
     {
         if ((rc = readDisk(childLT(fkey(buf)), &buf)) != 0) 
@@ -1533,10 +1535,10 @@ bErrType bFindFirstKey(bHandleType handle, void *key, eAdrType *rec)
     }
 
     if (ct(buf) == 0) return bErrKeyNotFound;
-    FMemory::memcpy(key, key(fkey(buf)), h->keySize);
+    FMemory::memcpy(key, key(fkey(buf)), currentNode->keySize);
     *rec = rec(fkey(buf));
-    h->curBuf = buf;
-    h->curKey = fkey(buf);
+    currentNode->curBuf = buf;
+    currentNode->curKey = fkey(buf);
 
     return bErrOk;
 }
@@ -1546,8 +1548,8 @@ bErrType bFindLastKey(bHandleType handle, void *key, eAdrType *rec)
     bErrType rc;                /* return code */
     bufType *buf;               /* buffer */
 
-    h = (hNode*)handle;
-    buf = &h->root;
+    currentNode = (hNode*)handle;
+    buf = &currentNode->root;
     while (!leaf(buf)) 
     {
         if ((rc = readDisk(childGE(lkey(buf)), &buf)) != 0) 
@@ -1557,10 +1559,10 @@ bErrType bFindLastKey(bHandleType handle, void *key, eAdrType *rec)
     if (ct(buf) == 0)
         return bErrKeyNotFound;
 
-    FMemory::memcpy(key, key(lkey(buf)), h->keySize);
+    FMemory::memcpy(key, key(lkey(buf)), currentNode->keySize);
     *rec = rec(lkey(buf));
-    h->curBuf = buf; 
-    h->curKey = lkey(buf);
+    currentNode->curBuf = buf; 
+    currentNode->curKey = lkey(buf);
 
     return bErrOk;
 }
@@ -1571,11 +1573,11 @@ bErrType bFindNextKey(bHandleType handle, void *key, eAdrType *rec)
     keyType *nkey;              /* next key */
     bufType *buf;               /* buffer */
 
-    h = (hNode*)handle;
-    if ((buf = h->curBuf) == NULL) 
+    currentNode = (hNode*)handle;
+    if ((buf = currentNode->curBuf) == NULL) 
         return bErrKeyNotFound;
 
-    if (h->curKey == lkey(buf))
+    if (currentNode->curKey == lkey(buf))
     {
         /* current key is last key in leaf node */
         if (next(buf))
@@ -1593,11 +1595,11 @@ bErrType bFindNextKey(bHandleType handle, void *key, eAdrType *rec)
     else
     {
         /* bump to next key */
-        nkey = h->curKey + ks(1);
+        nkey = currentNode->curKey + ks(1);
     }
-    FMemory::memcpy(key, key(nkey), h->keySize);
+    FMemory::memcpy(key, key(nkey), currentNode->keySize);
     *rec = rec(nkey);
-    h->curBuf = buf; h->curKey = nkey;
+    currentNode->curBuf = buf; currentNode->curKey = nkey;
     return bErrOk;
 }
 
@@ -1608,12 +1610,12 @@ bErrType bFindPrevKey(bHandleType handle, void *key, eAdrType *rec)
     keyType *fkey;              /* first key */
     bufType *buf;               /* buffer */
 
-    h = (hNode*)handle;
-    if ((buf = h->curBuf) == NULL) 
+    currentNode = (hNode*)handle;
+    if ((buf = currentNode->curBuf) == NULL) 
         return bErrKeyNotFound;
 
     fkey = fkey(buf);
-    if (h->curKey == fkey)
+    if (currentNode->curKey == fkey)
     {
         /* current key is first key in leaf node */
         if (prev(buf))
@@ -1631,12 +1633,12 @@ bErrType bFindPrevKey(bHandleType handle, void *key, eAdrType *rec)
     else
     {
         /* bump to previous key */
-        pkey = h->curKey - ks(1);
+        pkey = currentNode->curKey - ks(1);
     }
 
-    FMemory::memcpy(key, key(pkey), h->keySize);
+    FMemory::memcpy(key, key(pkey), currentNode->keySize);
     *rec = rec(pkey);
-    h->curBuf = buf; h->curKey = pkey;
+    currentNode->curBuf = buf; currentNode->curKey = pkey;
     return bErrOk;
 }
 

@@ -131,7 +131,7 @@
 
 #define LS_PLATFORM_32BITS (!LS_PLATFORM_64BITS)
 
-#if !__GNUC__
+#if LS_TARGET_PLATFORM != LS_TARGET_PLATFORM_APPLE
     #define typeof(x) decltype((x))
 #endif
 

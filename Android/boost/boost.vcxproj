@@ -1,0 +1,289 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ARM">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM">
+      <Configuration>Release</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x86">
+      <Configuration>Debug</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x86">
+      <Configuration>Release</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\chrono\src\chrono.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\chrono\src\process_cpu_clocks.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\chrono\src\thread_clock.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\date_time\src\gregorian\date_generators.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\date_time\src\gregorian\gregorian_types.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\date_time\src\gregorian\greg_month.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\date_time\src\gregorian\greg_weekday.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\date_time\src\posix_time\posix_time_types.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\filesystem\src\codecvt_error_category.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\filesystem\src\operations.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\filesystem\src\path.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\filesystem\src\path_traits.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\filesystem\src\portability.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\filesystem\src\unique_path.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\filesystem\src\utf8_codecvt_facet.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\filesystem\src\windows_file_codecvt.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\attribute_name.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\attribute_set.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\attribute_value_set.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\code_conversion.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\core.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\date_time_format_parser.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\default_attribute_names.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\default_filter_factory.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\default_formatter_factory.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\default_sink.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\dump.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\event.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\exceptions.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\filter_parser.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\formatter_parser.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\format_parser.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\global_logger_storage.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\init_from_settings.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\init_from_stream.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\light_rw_mutex.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\matches_relation_factory.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\named_scope.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\named_scope_format_parser.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\once_block.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\parser_utils.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\process_id.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\process_name.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\record_ostream.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\settings_parser.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\severity_level.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\spirit_encoding.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\syslog_backend.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\text_file_backend.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\text_multifile_backend.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\text_ostream_backend.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\threadsafe_queue.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\thread_id.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\thread_specific.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\timer.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\timestamp.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\trivial.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\unhandled_exception_count.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\archive_exception.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_archive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_iarchive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_iserializer.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_oarchive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_oserializer.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_pointer_iserializer.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_pointer_oserializer.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_serializer_map.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_text_iprimitive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_text_oprimitive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_text_wiprimitive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_text_woprimitive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_xml_archive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\binary_iarchive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\binary_oarchive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\binary_wiarchive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\binary_woarchive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\codecvt_null.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\extended_type_info.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\extended_type_info_no_rtti.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\extended_type_info_typeid.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\polymorphic_iarchive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\polymorphic_oarchive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\stl_port.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\text_iarchive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\text_oarchive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\text_wiarchive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\text_woarchive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\utf8_codecvt_facet.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\void_cast.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_archive_exception.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_grammar.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_iarchive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_oarchive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_wgrammar.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_wiarchive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_woarchive.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\system\src\error_code.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\thread\src\future.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\thread\src\pthread\once.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\thread\src\pthread\once_atomic.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\thread\src\pthread\thread.cpp" />
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\thread\src\tss_null.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\date_time\src\gregorian\greg_names.hpp" />
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\filesystem\src\windows_file_codecvt.hpp" />
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\alignment_gap_between.hpp" />
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\atomic_queue.hpp" />
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\attribute_set_impl.hpp" />
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\default_filter_factory.hpp" />
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\default_formatter_factory.hpp" />
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\default_sink.hpp" />
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\event_log_registry.hpp" />
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\id_formatting.hpp" />
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\parser_utils.hpp" />
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\spirit_encoding.hpp" />
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\stateless_allocator.hpp" />
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\unique_ptr.hpp" />
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\windows_version.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Submodules\boost\boost\libs\log\src\simple_event_log.mc" />
+    <None Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_xml_grammar.ipp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{ee31e4c1-d899-428f-8389-4a20eb27d91c}</ProjectGuid>
+    <Keyword>Android</Keyword>
+    <RootNamespace>boost</RootNamespace>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+    <ApplicationType>Android</ApplicationType>
+    <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Clang_3_6</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_3_6</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Clang_3_6</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_3_6</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Clang_3_6</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_3_6</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Clang_3_6</PlatformToolset>
+    <AndroidAPILevel>android-21</AndroidAPILevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_3_6</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <UseMultiToolTask>true</UseMultiToolTask>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <ExceptionHandling>Enabled</ExceptionHandling>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <CppLanguageStandard>c++11</CppLanguageStandard>
+      <AdditionalIncludeDirectories>..\..\Submodules\boost\boost\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>
