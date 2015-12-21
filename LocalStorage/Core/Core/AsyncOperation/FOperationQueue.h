@@ -25,14 +25,16 @@ public:
 
 class FOperationQueue : boost::noncopyable
 {
+private:
+    static const std::string k_defaultBackgroundThreadName;
+
 public:
 private:
     FIOContext_t                            m_mainContext;
     FSharedPtr<FIOContextRetainer_t>        m_mainContextRetainer;
 
-#if LS_DEBUG_MODE
     FThread_t::id                           m_creationThreadId;
-#endif
+    mutable FMutex_t                        m_mutex;
 
     FHashTable<std::string, FBackgroundContextPtr> m_backgroundContexts;
 
@@ -56,4 +58,11 @@ public:
     void dispatchMain(const FVoidBlock_t& executionBlock);
 
     void pollMain();
+
+    // Returns main's thread id for the primary FOperationQueue hosted in PBCore
+    _AttrAlwaysInline
+        FThread_t::id getSpawnThread() const
+    {
+        return m_creationThreadId;
+    }
 };

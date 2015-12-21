@@ -133,7 +133,7 @@ private:
         }
     };
 
-    static_assert(sizeof(FPoolInfo) == 32, "If you get there, this probably means that FPoolInfo is not 32 bit lenght somehow");
+    static_assert(sizeof(FPoolInfo) == 32, "If you get there, this probably means that FPoolInfo is not 32 bit length somehow");
 
     /** Information about a piece of free memory. 8 bytes */
     struct FFreeMem
@@ -202,6 +202,8 @@ private:
 
         PoolHashBucket()
         {
+            prev = this;
+            next = this;
         }
 
         void link( PoolHashBucket* after )
@@ -296,12 +298,40 @@ private:
     }
 
     _AttrAlwaysInline
-    void trackStats(FPoolTable* table, uint32_t size);
+    void trackStats(FPoolTable* table, uint32_t size)
+    {
+#if STATS
+        // keep track of memory lost to padding
+        table->totalWaste += table->blockSize - size;
+        table->totalRequests++;
+        table->activeRequests++;
+        table->maxActiveRequests = std::max(table->maxActiveRequests, table->activeRequests);
+        table->maxRequest = size > table->maxRequest ? size : table->maxRequest;
+        table->minRequest = size < table->minRequest ? size : table->minRequest;
+#endif
+    }
 
     /**
      * Create a 64k page of FPoolInfo structures for tracking allocations
      */
-    FPoolInfo* createIndirect();
+    FPoolInfo* createIndirect()
+    {
+        FAssert(indirectPoolBlockSize * sizeof(FPoolInfo) <= pageSize);
+
+        FPoolInfo* indirect = (FPoolInfo*)FPlatformMemory_t::binnedAllocFromOS(indirectPoolBlockSize * sizeof(FPoolInfo));
+        if(unlikely(!indirect))
+        {
+            outOfMemory(indirectPoolBlockSize * sizeof(FPoolInfo));
+        }
+
+        FMemory::memset(indirect, 0, indirectPoolBlockSize*sizeof(FPoolInfo));
+
+#if STATS
+        osPeak = std::max(osPeak, osCurrent += FAlign(indirectPoolBlockSize * sizeof(FPoolInfo), pageSize));
+        wastePeak = std::max(wastePeak, wasteCurrent += FAlign(indirectPoolBlockSize * sizeof(FPoolInfo), pageSize));
+#endif
+        return indirect;
+    }
 
     /**
      * Gets the FPoolInfo for a memory address. If no valid info exists one is created.
@@ -309,60 +339,468 @@ private:
      * acquire the mutex before calling
      */
     _AttrAlwaysInline
-    FPoolInfo* getPoolInfo( UIntPtr_t ptr );
+    FPoolInfo* getPoolInfo( UIntPtr_t ptr )
+    {
+        if (!hashBuckets)
+        {
+            // Init tables.
+            hashBuckets = (PoolHashBucket*)FPlatformMemory_t::binnedAllocFromOS(FAlign(maxHashBuckets * sizeof(PoolHashBucket), pageSize));
+
+            for (uint32_t i = 0; i < maxHashBuckets; ++i)
+            {
+                new (hashBuckets + i) PoolHashBucket();
+            }
+        }
+
+        UIntPtr_t key = ptr >> hashKeyShift;
+        UIntPtr_t hash = key & (maxHashBuckets - 1);
+        UIntPtr_t poolIndex = ((UIntPtr_t)ptr >> poolBitShift) & poolMask;
+
+        PoolHashBucket* collision= &hashBuckets[hash];
+        do
+        {
+            if (collision->key == key || !collision->firstPool)
+            {
+                if (!collision->firstPool)
+                {
+                    collision->key = key;
+                    initializeHashBucket(collision);
+                    FAssert(collision->firstPool != nullptr);
+                }
+                return &collision->firstPool[poolIndex];
+            }
+
+            collision = collision->next;
+
+        } while (collision != &hashBuckets[hash]);
+
+        //Create a new hash bucket entry
+        PoolHashBucket* newBucket = createHashBucket();
+        newBucket->key = key;
+        hashBuckets[hash].link(newBucket);
+        return &newBucket->firstPool[poolIndex];
+    }
 
     _AttrAlwaysInline
-    FPoolInfo* findPoolInfo(UIntPtr_t ptr1, UIntPtr_t& allocationBase);
+    FPoolInfo* findPoolInfo(UIntPtr_t ptr1, UIntPtr_t& allocationBase)
+    {
+        uint16_t nextStep = 0;
+
+        UIntPtr_t ptr = ptr1 &~ ((UIntPtr_t)pageSize-1);
+
+        for (uint32_t i=0, n=(binned_alloc_pool_size/pageSize) + 1; i < n; ++i)
+        {
+            FPoolInfo* pool = findPoolInfoInternal(ptr, nextStep);
+            if (pool)
+            {
+                allocationBase = ptr;
+                //checkSlow(Ptr1 >= AllocationBase && Ptr1 < AllocationBase+Pool->GetBytes());
+                return pool;
+            }
+
+            ptr = ((ptr - (pageSize * nextStep)) - 1) &~ ((UIntPtr_t)pageSize-1);
+        }
+        allocationBase=0;
+        return nullptr;
+    }
 
     _AttrAlwaysInline
-    FPoolInfo* findPoolInfoInternal(UIntPtr_t ptr, uint16_t& jumpOffset);
+    FPoolInfo* findPoolInfoInternal(UIntPtr_t ptr, uint16_t& jumpOffset)
+    {
+        FAssert(!!hashBuckets);
+
+        UIntPtr_t key = ptr >> hashKeyShift;
+        UIntPtr_t hash = key & (maxHashBuckets-1);
+        UIntPtr_t poolIndex = ((UIntPtr_t)ptr >> poolBitShift) & poolMask;
+        jumpOffset = 0;
+
+        PoolHashBucket* collision = &hashBuckets[hash];
+        do
+        {
+            if (collision->key == key)
+            {
+                if (!collision->firstPool[poolIndex].allocSize)
+                {
+                    jumpOffset = collision->firstPool[poolIndex].tableIndex;
+                    return nullptr;
+                }
+                return &collision->firstPool[poolIndex];
+            }
+            collision=collision->next;
+
+        } while (collision!=&hashBuckets[hash]);
+        
+        return nullptr;
+    }
 
     /**
      *	Returns a newly created and initialized PoolHashBucket for use.
      */
     _AttrAlwaysInline
-    PoolHashBucket* createHashBucket();
+    PoolHashBucket* createHashBucket()
+    {
+        PoolHashBucket* bucket = allocateHashBucket();
+        initializeHashBucket(bucket);
+        return bucket;
+    }
 
     /**
      *	Initializes bucket with valid parameters
      *	@param bucket pointer to be initialized
      */
     _AttrAlwaysInline
-    void initializeHashBucket(PoolHashBucket* bucket);
+    void initializeHashBucket(PoolHashBucket* bucket)
+    {
+        if (!bucket->firstPool)
+        {
+            bucket->firstPool = createIndirect();
+        }
+    }
 
     /**
      * Allocates a hash bucket from the free list of hash buckets
      */
-    PoolHashBucket* allocateHashBucket();
+    PoolHashBucket* allocateHashBucket()
+    {
+        if (!hashBucketFreeList)
+        {
+            hashBucketFreeList = (PoolHashBucket*)FPlatformMemory_t::binnedAllocFromOS(pageSize);
+
+#if STATS
+            osPeak = std::max(osPeak, osCurrent += pageSize);
+            wastePeak = std::max(wastePeak, wasteCurrent += pageSize);
+#endif
+            for (UIntPtr_t i = 0, n = (pageSize / sizeof(PoolHashBucket)); i < n; ++i)
+            {
+                hashBucketFreeList->link(new (hashBucketFreeList + i) PoolHashBucket());
+            }
+        }
+
+        PoolHashBucket* nextFree        = hashBucketFreeList->next;
+        PoolHashBucket* free            = hashBucketFreeList;
+
+        free->unlink();
+
+        if (nextFree == free)
+        {
+            nextFree = nullptr;
+        }
+
+        hashBucketFreeList = nextFree;
+        return free;
+    }
 
     _AttrAlwaysInline
-    FPoolInfo* allocatePoolMemory(FPoolTable* table, uint32_t poolSize, uint16_t tableIndex);
+    FPoolInfo* allocatePoolMemory(FPoolTable* table, uint32_t poolSize, uint16_t tableIndex)
+    {
+        // Must create a new pool.
+        uint32_t blocks = poolSize / table->blockSize;
+        uint32_t bytes = blocks * table->blockSize;
+
+        UIntPtr_t osBytes = FAlign(bytes, pageSize);
+
+        FAssert(blocks >= 1);
+        FAssert(blocks * table->blockSize <= bytes && poolSize >= bytes);
+
+        // Allocate memory.
+        FFreeMem* free = nullptr;
+
+        size_t actualPoolSize; //TODO: use this to reduce waste?
+        free = (FFreeMem*) osAlloc(osBytes, actualPoolSize);
+
+        FAssert(!((UIntPtr_t)free & (pageSize-1)));
+
+        if( !free )
+        {
+            outOfMemory(osBytes);
+        }
+
+        // Create pool in the indirect table.
+        FPoolInfo* pool;
+        {
+#ifdef USE_FINE_GRAIN_LOCKS
+            std::lock_guard<std::mutex> poolInfoLock(accessGuard);
+#endif
+            pool = getPoolInfo((UIntPtr_t)free);
+
+            for (UIntPtr_t i = (UIntPtr_t)pageSize, offset=0; i < osBytes; i += pageSize, ++offset)
+            {
+                FPoolInfo* trailingPool = getPoolInfo(((UIntPtr_t)free) + i);
+
+                FAssert(!!trailingPool);
+
+                //Set trailing pools to point back to first pool
+                trailingPool->setAllocationSizes(0, 0, (uint32_t)offset, (uint32_t)binnedOSTableIndex);
+            }
+        }
+
+        // Init pool.
+        pool->link( table->firstPool );
+        pool->setAllocationSizes(bytes, (uint32_t)osBytes, tableIndex, (uint32_t)binnedOSTableIndex);
+
+#if STATS
+        osPeak = std::max(osPeak, osCurrent += osBytes);
+        wastePeak = std::max(wastePeak, wasteCurrent += osBytes - bytes);
+        pool->taken		 = 0;
+        pool->firstMem   = free;
+
+        table->numActivePools++;
+        table->maxActivePools = std::max(table->maxActivePools, table->numActivePools);
+#endif
+        // Create first free item.
+        free->numFreeBlocks = blocks;
+        free->next          = nullptr;
+        
+        return pool;
+    }
 
     _AttrAlwaysInline
-    FFreeMem* allocateBlockFromPool(FPoolTable* table, FPoolInfo* pool);
+    FFreeMem* allocateBlockFromPool(FPoolTable* table, FPoolInfo* pool)
+    {
+        // Pick first available block and unlink it.
+        pool->taken++;
+
+        FAssert(pool->tableIndex < binnedOSTableIndex); // if this is false, FirstMem is actually a size not a pointer
+        FAssert(!!pool->firstMem);
+        FAssert(pool->firstMem->numFreeBlocks > 0);
+        FAssert(pool->firstMem->numFreeBlocks < page_size_limit);
+
+        FFreeMem* free = (FFreeMem*)((uint8_t*)pool->firstMem + --pool->firstMem->numFreeBlocks * table->blockSize);
+
+        if( !pool->firstMem->numFreeBlocks )
+        {
+            pool->firstMem = pool->firstMem->next;
+            if( !pool->firstMem )
+            {
+                // Move to exhausted list.
+                pool->unlink();
+                pool->link( table->exhaustedPool );
+            }
+        }
+#if STATS
+        usedPeak = std::max(usedPeak, usedCurrent += table->blockSize);
+#endif
+        return free;
+    }
 
     /**
      * Releases memory back to the system. This is not protected from multi-threaded access and it's
      * the callers responsibility to Lock AccessGuard before calling this.
      */
-    void freeInternal( void* ptr );
+    void freeInternal( void* ptr )
+    {
+        MEM_TIME(memTime -= FPlatformTime::Seconds());
+        STAT(currentAllocs--);
 
-    void pushFreeLockless(void* origin);
+        UIntPtr_t basePtr;
+        FPoolInfo* pool = findPoolInfo((UIntPtr_t)ptr, basePtr);
+        
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+        if (pool == nullptr)
+        {
+            FLogWarning(("Memory : Attempting to free a pointer we didn't allocate"));
+            return;
+        }
+#endif
+        FAssert(!!pool);
+        FAssert(pool->getBytes() != 0);
+
+        if( pool->tableIndex < binnedOSTableIndex )
+        {
+            FPoolTable* table = memSizeToPoolTable[pool->tableIndex];
+#ifdef USE_FINE_GRAIN_LOCKS
+            std::lock_guard<std::mutex> tableLock(table->mutex);
+#endif
+
+            STAT(table->activeRequests--);
+
+            // If this pool was exhausted, move to available list.
+            if( !pool->firstMem )
+            {
+                pool->unlink();
+                pool->link( table->firstPool );
+            }
+
+            // Free a pooled allocation.
+            FFreeMem* free		= (FFreeMem*)ptr;
+            free->numFreeBlocks	= 1;
+            free->next			= pool->firstMem;
+            pool->firstMem		= free;
+
+            STAT(usedCurrent -= table->blockSize);
+
+            // Free this pool.
+            FAssert(pool->taken >= 1);
+
+            if( --pool->taken == 0 )
+            {
+#if STATS
+                table->numActivePools--;
+#endif
+                // Free the OS memory.
+                size_t osBytes = pool->getOsBytes(pageSize, (uint32_t)binnedOSTableIndex);
+
+                STAT(osCurrent -= osBytes);
+                STAT(wasteCurrent -= osBytes - pool->getBytes());
+
+                pool->unlink();
+                pool->setAllocationSizes(0, 0, 0, (uint32_t)binnedOSTableIndex);
+
+                osFree((void*)basePtr, osBytes);
+            }
+        }
+        else
+        {
+            // Free an OS allocation.
+            FAssert(!((UIntPtr_t)ptr & (pageSize-1)));
+
+            size_t osBytes = pool->getOsBytes(pageSize, (uint32_t)binnedOSTableIndex);
+
+            STAT(usedCurrent -= pool->getBytes());
+            STAT(osCurrent -= osBytes);
+            STAT(wasteCurrent -= osBytes - pool->getBytes());
+
+            osFree(ptr, osBytes);
+        }
+        
+        MEM_TIME(MemTime += FPlatformTime::Seconds());
+    }
+
+    void pushFreeLockless(void* origin)
+    {
+#ifdef USE_LOCKFREE_DELETE
+        PendingFreeList->Push(Ptr);
+#else
+#ifdef USE_COARSE_GRAIN_LOCKS
+        FScopeLock ScopedLock(&AccessGuard);
+#endif
+        freeInternal(origin);
+#endif
+    }
 
     /**
      * Clear and Process the list of frees to be deallocated. It's the callers
      * responsibility to Lock AccessGuard before calling this
      */
-    void flushPendingFrees();
+    void flushPendingFrees()
+    {
+#ifdef USE_LOCKFREE_DELETE
+        if (!PendingFreeList && !bDoneFreeListInit)
+        {
+            bDoneFreeListInit=true;
+            PendingFreeList = new ((void*)PendingFreeListMemory) TLockFreePointerList<void>();
+        }
+        // Because a lockless list and TArray calls new/malloc internally, need to guard against re-entry
+        if (bFlushingFrees || !PendingFreeList)
+        {
+            return;
+        }
+        bFlushingFrees=true;
+        PendingFreeList->PopAll(FlushedFrees);
+        for (uint32 i=0, n=FlushedFrees.Num(); i<n; ++i)
+        {
+            FreeInternal(FlushedFrees[i]);
+        }
+        FlushedFrees.Reset();
+        bFlushingFrees=false;
+#endif
+    }
 
     _AttrAlwaysInline
-    void osFree(void* ptr, size_t size);
+    void osFree(void* ptr, size_t size)
+    {
+#ifdef CACHE_FREED_OS_ALLOCS
+#ifdef USE_FINE_GRAIN_LOCKS
+        std::lock_guard<std::mutex> mainLock(accessGuard);
+#endif
+        if ((cachedTotal + size > MAX_CACHED_OS_FREES_BYTE_LIMIT) || (size > binned_alloc_pool_size))
+        {
+            FPlatformMemory_t::binnedFreeToOS(ptr);
+            return;
+        }
+
+        if (freedPageBlocksNum >= MAX_CACHED_OS_FREES)
+        {
+            //Remove the oldest one
+            void* freePtr = freedPageBlocks[freedPageBlocksNum - 1].ptr;
+            cachedTotal -= freedPageBlocks[freedPageBlocksNum - 1].byteSize;
+            --freedPageBlocksNum;
+            FPlatformMemory_t::binnedFreeToOS(freePtr);
+        }
+
+        freedPageBlocks[freedPageBlocksNum].ptr = ptr;
+        freedPageBlocks[freedPageBlocksNum].byteSize = size;
+
+        cachedTotal += size;
+        ++freedPageBlocksNum;
+#else
+        (void)size;
+        FPlatformMemory_t::binnedFreeToOS(ptr);
+#endif
+    }
 
     _AttrAlwaysInline
-    void* osAlloc(size_t newSize, size_t& outActualSize);
+    void* osAlloc(size_t newSize, size_t& outActualSize)
+    {
+#ifdef CACHE_FREED_OS_ALLOCS
+        {
+#ifdef USE_FINE_GRAIN_LOCKS
+            // We want to hold the lock a little as possible so release it
+            // before the big call to the OS
+            std::lock_guard<std::mutex> mainLock(accessGuard);
+#endif
+            for (uint32_t i = 0; i < freedPageBlocksNum; ++i)
+            {
+                // is it possible (and worth i.e. <25% overhead) to use this block
+                if (freedPageBlocks[i].byteSize >= newSize && freedPageBlocks[i].byteSize * 3 <= newSize * 4)
+                {
+                    void* ret = freedPageBlocks[i].ptr;
+
+                    outActualSize = freedPageBlocks[i].byteSize;
+
+                    cachedTotal -= freedPageBlocks[i].byteSize;
+
+                    freedPageBlocks[i] = freedPageBlocks[--freedPageBlocksNum];
+                    return ret;
+                }
+            };
+        }
+
+        outActualSize = newSize;
+
+        void* ptr = FPlatformMemory_t::binnedAllocFromOS(newSize);
+
+        if (!ptr)
+        {
+            //Are we holding on to much mem? Release it all.
+            flushAllocCache();
+            ptr = FPlatformMemory_t::binnedAllocFromOS(newSize);
+        }
+
+        return ptr;
+#else
+        (void)outActualSize;
+        return FPlatformMemory_t::binnedAllocFromOS(NewSize);
+#endif
+    }
 
 #ifdef CACHE_FREED_OS_ALLOCS
-    void flushAllocCache();
+    void flushAllocCache()
+    {
+#ifdef USE_FINE_GRAIN_LOCKS
+        std::lock_guard<std::mutex> mainLock(accessGuard);
+#endif
+        for (int i = 0, n = freedPageBlocksNum; i < n; ++i)
+        {
+            //Remove allocs
+            FPlatformMemory_t::binnedFreeToOS(freedPageBlocks[i].ptr);
+            freedPageBlocks[i].ptr = nullptr;
+            freedPageBlocks[i].byteSize = 0;
+        }
+
+        freedPageBlocksNum = 0;
+        cachedTotal = 0;
+    }
 #endif
 
 public:

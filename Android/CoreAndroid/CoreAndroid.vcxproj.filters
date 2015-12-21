@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{15746167-e3c6-4ac8-bad7-6fcfc48cfcde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Types">
+      <UniqueIdentifier>{07bf2bce-fad0-455e-b8ed-8a515da45c6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Memory">
+      <UniqueIdentifier>{8289859a-deab-44b1-84a1-56e20b1e4e17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AsyncOperation">
+      <UniqueIdentifier>{e8572333-9d49-4d1e-8995-ee5644afbc54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IO">
+      <UniqueIdentifier>{daf89dd7-a87c-45d8-849c-fc2e2963dade}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Log">
+      <UniqueIdentifier>{8394494a-5a07-4f19-88be-6772ff3923fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Math">
+      <UniqueIdentifier>{3a02646c-4900-4ad1-bd93-3ddf543e1538}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\LocalStorage\Core\Core\CorePrecompiled.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\LocalStorage\Core\Core\FDebug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\LocalStorage\Core\Core\Memory\FAllocationsTracker.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\LocalStorage\Core\Core\Memory\FGenericMemory.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\LocalStorage\Core\Core\Memory\FIOSMemory.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\LocalStorage\Core\Core\Memory\FMacMemory.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\LocalStorage\Core\Core\Memory\FMallocBinned.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\LocalStorage\Core\Core\Memory\FMallocTBB.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\LocalStorage\Core\Core\Memory\FMemory.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\LocalStorage\Core\Core\Memory\FWindowsMemory.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\LocalStorage\Core\Core\AsyncOperation\FOperation.cpp">
+      <Filter>Source Files\AsyncOperation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\LocalStorage\Core\Core\AsyncOperation\FOperationQueue.cpp">
+      <Filter>Source Files\AsyncOperation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\LocalStorage\Core\Core\IO\FIO.cpp">
+      <Filter>Source Files\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\LocalStorage\Core\Core\Log\FLoggerGeneric.cpp">
+      <Filter>Source Files\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\LocalStorage\Core\Core\Math\FGenericMath.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\LocalStorage\Core\Core\Memory\FAndroidMemory.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\CoreHeaders.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\CorePrecompiled.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\FDebug.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\FMisc.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\GNUAttributes.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\LSBoostHeaders.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\LSCompileConfig.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\LSSharedPointer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\LSStableHeaders.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\MSVCAttributes.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\LSPlatform.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Types\FArray.h">
+      <Filter>Source Files\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Types\FDeque.h">
+      <Filter>Source Files\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Types\FHashSet.h">
+      <Filter>Source Files\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Types\FHashTable.h">
+      <Filter>Source Files\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Types\FList.h">
+      <Filter>Source Files\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Types\FMap.h">
+      <Filter>Source Files\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Types\FStaticArray.h">
+      <Filter>Source Files\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Types\FString.h">
+      <Filter>Source Files\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Types\FTLAllocator.h">
+      <Filter>Source Files\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Types\FTypeTraits.h">
+      <Filter>Source Files\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Memory\FAllocationsTracker.h">
+      <Filter>Source Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Memory\FGenericMemory.h">
+      <Filter>Source Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Memory\FIOSMemory.h">
+      <Filter>Source Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Memory\FMacMemory.h">
+      <Filter>Source Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Memory\FMallocAnsi.h">
+      <Filter>Source Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Memory\FMallocBinned.h">
+      <Filter>Source Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Memory\FMallocTBB.h">
+      <Filter>Source Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Memory\FMemory.h">
+      <Filter>Source Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Memory\FMemoryBase.h">
+      <Filter>Source Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Memory\FWindowsMemory.h">
+      <Filter>Source Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\AsyncOperation\FOperation.h">
+      <Filter>Source Files\AsyncOperation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\AsyncOperation\FOperationQueue.h">
+      <Filter>Source Files\AsyncOperation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\IO\FIO.h">
+      <Filter>Source Files\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Log\FLogger.h">
+      <Filter>Source Files\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Log\FLoggerGeneric.h">
+      <Filter>Source Files\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Log\FLogLevel.h">
+      <Filter>Source Files\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Math\FGenericMath.h">
+      <Filter>Source Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="..\..\LocalStorage\Core\Core\Memory\FAndroidMemory.h">
+      <Filter>Source Files\Memory</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

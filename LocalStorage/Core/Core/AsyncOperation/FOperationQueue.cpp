@@ -2,12 +2,7 @@
 #include "FOperationQueue.h"
 #include "FOperation.h"
 
-#if LS_DEBUG_MODE
-    #define THREAD_CHECK \
-        FAssert("You are not allowed to call this method from foreign thread" && m_creationThreadId == FThisThread::get_id())
-#else
-    #define THREAD_CHECK
-#endif
+const std::string FOperationQueue::k_defaultBackgroundThreadName = "default";
 
 FOperationQueue::FOperationQueue()
 {
@@ -25,25 +20,25 @@ void FOperationQueue::createDefaultContexts()
 
     std::call_once(once, [this]
     {
-#if LS_DEBUG_MODE
+#if PB_DEBUG_MODE
         m_creationThreadId = FThisThread::get_id();
 #endif
 
         m_mainContextRetainer = FMakeShared<FIOContextRetainer_t>(m_mainContext);
-        addNewContext("default");
+        addNewContext(k_defaultBackgroundThreadName);
     });
 }
 
 void FOperationQueue::addOperation(const FOperationPtr& operation)
 {
-    THREAD_CHECK;
+    FLockGuard_t lock(m_mutex);
 
-    m_backgroundContexts["default"]->addOperation(operation);
+    m_backgroundContexts[k_defaultBackgroundThreadName]->addOperation(operation);
 }
 
 void FOperationQueue::addContext(const std::string& name, const FBackgroundContextPtr& context)
 {
-    THREAD_CHECK;
+    FLockGuard_t lock(m_mutex);
 
     auto it = m_backgroundContexts.insert(std::make_pair(name, context));
 
@@ -52,7 +47,7 @@ void FOperationQueue::addContext(const std::string& name, const FBackgroundConte
 
 void FOperationQueue::removeContext(const std::string& name)
 {
-    THREAD_CHECK;
+    FLockGuard_t lock(m_mutex);
 
     auto it = m_backgroundContexts.find(name);
     FAssert(it != m_backgroundContexts.end());
@@ -60,9 +55,14 @@ void FOperationQueue::removeContext(const std::string& name)
     m_backgroundContexts.erase(it);
 }
 
+void FOperationQueue::dispatchAsync(const FVoidBlock_t & executionBlock)
+{
+    dispatchAsync(k_defaultBackgroundThreadName, executionBlock);
+}
+
 void FOperationQueue::dispatchAsync(const std::string& contextName, const FVoidBlock_t& executionBlock)
 {
-    THREAD_CHECK;
+    FLockGuard_t lock(m_mutex);
 
     auto it = m_backgroundContexts.find(contextName);
     FAssert(it != m_backgroundContexts.end());
@@ -82,9 +82,9 @@ void FOperationQueue::pollMain()
 
 FBackgroundContextPtr FOperationQueue::addNewContext(const std::string& name)
 {
-    THREAD_CHECK;
+    FLockGuard_t lock(m_mutex);
 
-#if LS_DEBUG_MODE
+#if PB_DEBUG_MODE
     FAssert(m_backgroundContexts.find(name) == m_backgroundContexts.end());
 #endif
 
@@ -96,7 +96,7 @@ FBackgroundContextPtr FOperationQueue::addNewContext(const std::string& name)
 
 FBackgroundContextPtr FOperationQueue::getContext(const std::string& name) const
 {
-    THREAD_CHECK;
+    FLockGuard_t lock(m_mutex);
 
     auto it = m_backgroundContexts.find(name);
     if (it != m_backgroundContexts.end())

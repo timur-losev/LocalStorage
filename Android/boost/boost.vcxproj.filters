@@ -1,0 +1,398 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="libs">
+      <UniqueIdentifier>{eb142eec-3604-4f76-8e13-b9892260c389}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\datetime">
+      <UniqueIdentifier>{aa54c85d-6436-4e23-ab76-cdc912d8d091}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\datetime\greg">
+      <UniqueIdentifier>{1515d38a-7788-4fb3-bccb-0ebf3c0132fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\datetime\posix">
+      <UniqueIdentifier>{ffcb696e-480b-406a-aeca-a687504ba631}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\filesystem">
+      <UniqueIdentifier>{0d9581ab-d186-4a5d-8a4e-a41ab8e434ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\log">
+      <UniqueIdentifier>{cd9f57c5-aee3-43f4-9b7e-a49ab9ff96b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\serialization">
+      <UniqueIdentifier>{1b362f4a-0f02-4010-9d3d-ca985e7d06e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\system">
+      <UniqueIdentifier>{e4296798-7aae-4303-ae5d-b16bf8734f6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\thread">
+      <UniqueIdentifier>{cd1066e0-482a-4bab-8e64-5a8c21ad115d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\chrono">
+      <UniqueIdentifier>{4ec3d41c-dfa9-4bcd-8408-147b68b4c4b8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\date_time\src\gregorian\date_generators.cpp">
+      <Filter>libs\datetime\greg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\date_time\src\gregorian\gregorian_types.cpp">
+      <Filter>libs\datetime\greg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\date_time\src\gregorian\greg_month.cpp">
+      <Filter>libs\datetime\greg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\date_time\src\gregorian\greg_weekday.cpp">
+      <Filter>libs\datetime\greg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\date_time\src\posix_time\posix_time_types.cpp">
+      <Filter>libs\datetime\posix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\filesystem\src\codecvt_error_category.cpp">
+      <Filter>libs\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\filesystem\src\operations.cpp">
+      <Filter>libs\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\filesystem\src\path.cpp">
+      <Filter>libs\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\filesystem\src\path_traits.cpp">
+      <Filter>libs\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\filesystem\src\portability.cpp">
+      <Filter>libs\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\filesystem\src\unique_path.cpp">
+      <Filter>libs\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\filesystem\src\utf8_codecvt_facet.cpp">
+      <Filter>libs\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\filesystem\src\windows_file_codecvt.cpp">
+      <Filter>libs\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\attribute_name.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\attribute_set.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\attribute_value_set.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\code_conversion.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\core.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\date_time_format_parser.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\default_attribute_names.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\default_filter_factory.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\default_formatter_factory.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\default_sink.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\dump.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\event.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\exceptions.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\filter_parser.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\formatter_parser.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\format_parser.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\global_logger_storage.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\init_from_settings.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\init_from_stream.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\light_rw_mutex.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\matches_relation_factory.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\named_scope.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\named_scope_format_parser.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\once_block.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\parser_utils.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\process_id.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\process_name.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\record_ostream.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\settings_parser.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\severity_level.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\spirit_encoding.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\syslog_backend.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\text_file_backend.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\text_multifile_backend.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\text_ostream_backend.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\threadsafe_queue.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\thread_id.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\thread_specific.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\timer.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\timestamp.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\trivial.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\unhandled_exception_count.cpp">
+      <Filter>libs\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\archive_exception.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_archive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_iarchive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_iserializer.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_oarchive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_oserializer.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_pointer_iserializer.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_pointer_oserializer.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_serializer_map.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_text_iprimitive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_text_oprimitive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_text_wiprimitive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_text_woprimitive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_xml_archive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\binary_iarchive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\binary_oarchive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\binary_wiarchive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\binary_woarchive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\codecvt_null.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\extended_type_info.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\extended_type_info_no_rtti.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\extended_type_info_typeid.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\polymorphic_iarchive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\polymorphic_oarchive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\stl_port.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\text_iarchive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\text_oarchive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\text_wiarchive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\text_woarchive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\utf8_codecvt_facet.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\void_cast.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_archive_exception.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_grammar.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_iarchive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_oarchive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_wgrammar.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_wiarchive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_woarchive.cpp">
+      <Filter>libs\serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\system\src\error_code.cpp">
+      <Filter>libs\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\thread\src\future.cpp">
+      <Filter>libs\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\thread\src\tss_null.cpp">
+      <Filter>libs\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\chrono\src\chrono.cpp">
+      <Filter>libs\chrono</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\chrono\src\process_cpu_clocks.cpp">
+      <Filter>libs\chrono</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\chrono\src\thread_clock.cpp">
+      <Filter>libs\chrono</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\thread\src\pthread\once.cpp">
+      <Filter>libs\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\thread\src\pthread\once_atomic.cpp">
+      <Filter>libs\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\boost\boost\libs\thread\src\pthread\thread.cpp">
+      <Filter>libs\thread</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\date_time\src\gregorian\greg_names.hpp">
+      <Filter>libs\datetime\greg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\filesystem\src\windows_file_codecvt.hpp">
+      <Filter>libs\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\alignment_gap_between.hpp">
+      <Filter>libs\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\atomic_queue.hpp">
+      <Filter>libs\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\attribute_set_impl.hpp">
+      <Filter>libs\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\default_filter_factory.hpp">
+      <Filter>libs\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\default_formatter_factory.hpp">
+      <Filter>libs\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\default_sink.hpp">
+      <Filter>libs\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\event_log_registry.hpp">
+      <Filter>libs\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\id_formatting.hpp">
+      <Filter>libs\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\parser_utils.hpp">
+      <Filter>libs\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\spirit_encoding.hpp">
+      <Filter>libs\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\stateless_allocator.hpp">
+      <Filter>libs\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\unique_ptr.hpp">
+      <Filter>libs\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Submodules\boost\boost\libs\log\src\windows_version.hpp">
+      <Filter>libs\log</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Submodules\boost\boost\libs\log\src\simple_event_log.mc">
+      <Filter>libs\log</Filter>
+    </None>
+    <None Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_xml_grammar.ipp">
+      <Filter>libs\serialization</Filter>
+    </None>
+  </ItemGroup>
+</Project>
