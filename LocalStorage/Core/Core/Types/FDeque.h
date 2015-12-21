@@ -6,7 +6,7 @@
 
 template <typename T, typename Allocator = FTLAllocator<T, FDefaultDeleter>>
 using FDeque =
-#ifdef LS_USE_BOOST_CONTAINERS
+#if LS_USE_BOOST_CONTAINERS
     boost::container::deque<T, Allocator>;
 #else
     std::deque<T, Allocator>;

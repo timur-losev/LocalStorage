@@ -3,7 +3,7 @@
 
 template<typename T, typename A = FTLAllocator<T, FDefaultDeleter> >
 using FList =
-#ifdef LS_USE_BOOST_CONTAINERS
+#if LS_USE_BOOST_CONTAINERS
     boost::container::list<T, A>;
 #else
     std::list<T, A>;

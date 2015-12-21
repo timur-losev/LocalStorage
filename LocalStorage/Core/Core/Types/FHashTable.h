@@ -12,7 +12,7 @@ template<
         typename Eq = std::equal_to<Key>,
         typename A = FTLAllocator<std::pair<Key, T>, FDefaultDeleter > >
 using FHashTable =
-#ifdef LS_USE_BOOST_CONTAINERS
+#if LS_USE_BOOST_CONTAINERS
 boost::unordered::unordered_map<Key, T, Hasher, Eq, A>;
 #else
 std::unordered_map<Key, T, Hasher, Eq, FTLAllocator<
@@ -22,7 +22,7 @@ std::unordered_map<Key, T, Hasher, Eq, FTLAllocator<
 
 #else
 
-#ifdef LS_USE_BOOST_CONTAINERS 
+#if LS_USE_BOOST_CONTAINERS 
 #define FHashTable boost::unordered::unordered_map 
 #else
 #define FHashTable std::unordered_map
