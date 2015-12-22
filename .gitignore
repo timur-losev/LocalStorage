@@ -40,3 +40,4 @@ LocalStorage/Core/Debug/Core.idb
 *.VC.db
 LocalStorage/Core/Debug/
 ARM/
+Android/NativeActivity/NativeActivity.NativeActivity/x86/

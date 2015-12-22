@@ -237,6 +237,8 @@ void android_main(struct android_app* state) {
 		engine.state = *(struct saved_state*)state->savedState;
 	}
 
+    //FLogDebug(("Debug"));
+
 	engine.animating = 1;
 
 	// loop waiting for stuff to do.

@@ -93,44 +93,6 @@
     <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\timestamp.cpp" />
     <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\trivial.cpp" />
     <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\unhandled_exception_count.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\archive_exception.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_archive.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_iarchive.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_iserializer.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_oarchive.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_oserializer.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_pointer_iserializer.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_pointer_oserializer.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_serializer_map.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_text_iprimitive.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_text_oprimitive.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_text_wiprimitive.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_text_woprimitive.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_xml_archive.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\binary_iarchive.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\binary_oarchive.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\binary_wiarchive.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\binary_woarchive.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\codecvt_null.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\extended_type_info.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\extended_type_info_no_rtti.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\extended_type_info_typeid.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\polymorphic_iarchive.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\polymorphic_oarchive.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\stl_port.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\text_iarchive.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\text_oarchive.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\text_wiarchive.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\text_woarchive.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\utf8_codecvt_facet.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\void_cast.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_archive_exception.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_grammar.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_iarchive.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_oarchive.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_wgrammar.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_wiarchive.cpp" />
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_woarchive.cpp" />
     <ClCompile Include="..\..\Submodules\boost\boost\libs\system\src\error_code.cpp" />
     <ClCompile Include="..\..\Submodules\boost\boost\libs\thread\src\future.cpp" />
     <ClCompile Include="..\..\Submodules\boost\boost\libs\thread\src\pthread\once.cpp" />
@@ -157,7 +119,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Submodules\boost\boost\libs\log\src\simple_event_log.mc" />
-    <None Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_xml_grammar.ipp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ee31e4c1-d899-428f-8389-4a20eb27d91c}</ProjectGuid>
@@ -166,6 +127,7 @@
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <ApplicationType>Android</ApplicationType>
     <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
+    <ProjectName>boostAndroid</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -203,6 +165,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>Clang_3_6</PlatformToolset>
     <AndroidAPILevel>android-21</AndroidAPILevel>
+    <UseOfStl>c++_static</UseOfStl>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -228,6 +191,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <UseMultiToolTask>true</UseMultiToolTask>
+    <TargetName>libBoostAndroid</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
   </PropertyGroup>

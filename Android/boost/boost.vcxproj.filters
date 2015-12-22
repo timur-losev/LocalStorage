@@ -19,9 +19,6 @@
     <Filter Include="libs\log">
       <UniqueIdentifier>{cd9f57c5-aee3-43f4-9b7e-a49ab9ff96b3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="libs\serialization">
-      <UniqueIdentifier>{1b362f4a-0f02-4010-9d3d-ca985e7d06e9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="libs\system">
       <UniqueIdentifier>{e4296798-7aae-4303-ae5d-b16bf8734f6b}</UniqueIdentifier>
     </Filter>
@@ -198,120 +195,6 @@
     <ClCompile Include="..\..\Submodules\boost\boost\libs\log\src\unhandled_exception_count.cpp">
       <Filter>libs\log</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\archive_exception.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_archive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_iarchive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_iserializer.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_oarchive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_oserializer.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_pointer_iserializer.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_pointer_oserializer.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_serializer_map.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_text_iprimitive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_text_oprimitive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_text_wiprimitive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_text_woprimitive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_xml_archive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\binary_iarchive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\binary_oarchive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\binary_wiarchive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\binary_woarchive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\codecvt_null.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\extended_type_info.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\extended_type_info_no_rtti.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\extended_type_info_typeid.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\polymorphic_iarchive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\polymorphic_oarchive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\stl_port.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\text_iarchive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\text_oarchive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\text_wiarchive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\text_woarchive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\utf8_codecvt_facet.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\void_cast.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_archive_exception.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_grammar.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_iarchive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_oarchive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_wgrammar.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_wiarchive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\boost\boost\libs\serialization\src\xml_woarchive.cpp">
-      <Filter>libs\serialization</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Submodules\boost\boost\libs\system\src\error_code.cpp">
       <Filter>libs\system</Filter>
     </ClCompile>
@@ -390,9 +273,6 @@
   <ItemGroup>
     <None Include="..\..\Submodules\boost\boost\libs\log\src\simple_event_log.mc">
       <Filter>libs\log</Filter>
-    </None>
-    <None Include="..\..\Submodules\boost\boost\libs\serialization\src\basic_xml_grammar.ipp">
-      <Filter>libs\serialization</Filter>
     </None>
   </ItemGroup>
 </Project>

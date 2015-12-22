@@ -66,13 +66,13 @@ private:
         class Hash = std::hash<Key>,
         class KeyEqual = std::equal_to<Key>,
         class A = FTLAllocator< Value , FUntrackedDeleter, FUntrackedAllocator > >
-    using UUnorderedMapTmpl =  std::unordered_map<Key, T, Hash, KeyEqual, A>;
+    using UUnorderedMapTmpl = FHashTable<Key, T, Hash, KeyEqual, A>;
     
     //std::vector
     template <
         class T,
         class A = FTLAllocator< T , FUntrackedDeleter, FUntrackedAllocator > >
-    using UVectorTmpl = std::vector<T,A>;
+    using UVectorTmpl = FArray<T,A>;
     
     //std::ostringstream
     template <
@@ -90,7 +90,7 @@ private:
     template<
         class T,
         class A = FTLAllocator< T, FUntrackedDeleter, FUntrackedAllocator > >
-    using UList = std::list<T,A>;
+    using UList = FList<T,A>;
     
 
     typedef UUnorderedMapTmpl<void*, Block> AllocationMap_t;
