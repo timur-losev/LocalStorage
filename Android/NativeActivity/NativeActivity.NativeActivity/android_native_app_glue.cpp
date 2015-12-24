@@ -405,6 +405,8 @@ static void onInputQueueDestroyed(ANativeActivity* activity, AInputQueue* queue)
     android_app_set_input((struct android_app*)activity->instance, NULL);
 }
 
+#if !USE_APP
+
 void ANativeActivity_onCreate(ANativeActivity* activity,
         void* savedState, size_t savedStateSize) {
     LOGV("Creating: %p\n", activity);
@@ -427,3 +429,5 @@ void ANativeActivity_onCreate(ANativeActivity* activity,
 
     activity->instance = android_app_create(activity, savedState, savedStateSize);
 }
+
+#endif

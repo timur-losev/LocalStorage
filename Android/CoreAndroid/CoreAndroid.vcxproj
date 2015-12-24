@@ -67,6 +67,7 @@
     <ClInclude Include="..\..\LocalStorage\Core\Core\AsyncOperation\FOperationQueue.h" />
     <ClInclude Include="..\..\LocalStorage\Core\Core\CoreHeaders.h" />
     <ClInclude Include="..\..\LocalStorage\Core\Core\CorePrecompiled.h" />
+    <ClInclude Include="..\..\LocalStorage\Core\Core\FDateTime.h" />
     <ClInclude Include="..\..\LocalStorage\Core\Core\FDebug.h" />
     <ClInclude Include="..\..\LocalStorage\Core\Core\FMisc.h" />
     <ClInclude Include="..\..\LocalStorage\Core\Core\GNUAttributes.h" />

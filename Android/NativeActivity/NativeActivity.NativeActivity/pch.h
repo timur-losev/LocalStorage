@@ -23,3 +23,5 @@
 #include "android_native_app_glue.h"
 
 #include "CorePrecompiled.h"
+
+#define USE_APP 1

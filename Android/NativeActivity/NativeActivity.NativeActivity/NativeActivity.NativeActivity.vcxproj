@@ -158,7 +158,7 @@
       <CppLanguageStandard>c++11</CppLanguageStandard>
       <PreprocessorDefinitions>ANDROID;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CLanguageStandard>c11</CLanguageStandard>
-      <Verbose>true</Verbose>
+      <Verbose>false</Verbose>
     </ClCompile>
     <Link>
       <LibraryDependencies>%(LibraryDependencies);GLESv1_CM;EGL;BoostAndroid</LibraryDependencies>
@@ -218,11 +218,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Application.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="android_native_app_glue.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.cpp" />
+    <ClCompile Include="Application.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
