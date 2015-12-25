@@ -35,6 +35,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\LocalStorage\Core\Core\AsyncOperation\FCrossThreadInvoker.cpp" />
     <ClCompile Include="..\..\LocalStorage\Core\Core\AsyncOperation\FOperation.cpp" />
     <ClCompile Include="..\..\LocalStorage\Core\Core\AsyncOperation\FOperationQueue.cpp" />
     <ClCompile Include="..\..\LocalStorage\Core\Core\CorePrecompiled.cpp" />
@@ -63,6 +64,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\AsyncOperation\FCrossThreadInvoker.h" />
     <ClInclude Include="..\..\LocalStorage\Core\Core\AsyncOperation\FOperation.h" />
     <ClInclude Include="..\..\LocalStorage\Core\Core\AsyncOperation\FOperationQueue.h" />
     <ClInclude Include="..\..\LocalStorage\Core\Core\CoreHeaders.h" />

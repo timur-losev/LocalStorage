@@ -31,9 +31,22 @@ void Application::appEntry()
 
     m_isRunning = true;
 
+    createInvoker();
+
+    m_onAppInitializedVar.notify_all();
+
     while (true)
     {
-        
+
+
+        int ident, events;
+
+        while ((ident = ALooper_pollAll(0, nullptr, &events, nullptr)) >= 0)
+        {
+            processHandlers[ident - 1]();
+        }
+
+
     }
 }
 
@@ -57,18 +70,10 @@ bool Application::initialize()
 
     m_worker = FMakeShared<FThread_t>(std::bind(&Application::appEntry, this));
 
-    while (true)
-    {
-        bool val = m_isRunning.load(std::memory_order_relaxed);
-        if (val)
-        {
-            break;
-        }
+    FUniqueLock_t lock(m_mutex);
+    m_onAppInitializedVar.wait(lock);
 
-        FThisThread::sleep_for(FChrono::milliseconds(1));
-    }
-
-    
+    return true;
 }
 
 void Application::destroy()
@@ -76,9 +81,27 @@ void Application::destroy()
 
 }
 
+void Application::setState(ActivityState state)
+{
+    m_activityState.store(state, std::memory_order_relaxed);
+}
+
 void Application::onStart(ANativeActivity* act)
 {
+    Application::getRef().setState(StateStart);
+}
 
+void Application::onInputCreated(AInputQueue* input)
+{
+
+}
+
+void Application::writeCmd(int8_t cmd)
+{
+    if (write(m_pipes[PP_WRITE], &cmd, sizeof(cmd)) != sizeof(cmd))
+    {
+        FAssert(false);
+    }
 }
 
 #if USE_APP

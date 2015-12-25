@@ -22,6 +22,9 @@
     <Filter Include="Source Files\Math">
       <UniqueIdentifier>{3a02646c-4900-4ad1-bd93-3ddf543e1538}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\AsyncOperation\CrossThreadInvoker">
+      <UniqueIdentifier>{69b5df95-1531-4a4e-bbb5-bacd63abbaa7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\LocalStorage\Core\Core\CorePrecompiled.cpp">
@@ -71,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="..\..\LocalStorage\Core\Core\Memory\FAndroidMemory.cpp">
       <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\LocalStorage\Core\Core\AsyncOperation\FCrossThreadInvoker.cpp">
+      <Filter>Source Files\AsyncOperation\CrossThreadInvoker</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +200,9 @@
     </ClInclude>
     <ClInclude Include="..\..\LocalStorage\Core\Core\FDateTime.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LocalStorage\Core\Core\AsyncOperation\FCrossThreadInvoker.h">
+      <Filter>Source Files\AsyncOperation\CrossThreadInvoker</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
