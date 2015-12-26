@@ -145,16 +145,20 @@ public:
         */
         LopperIdUser
     };
+
+    typedef FSignals::signal<bool(AInputEvent*)> OnInputSignal_t;
 private:
     ANativeActivity*    m_activity          = nullptr;
     ALooper*            m_looper            = nullptr;
     AInputQueue*        m_inputQueue        = nullptr;
+    ANativeWindow*      m_window            = nullptr;
     std::atomic_int     m_activityState;
 
     FConditionVariable_t m_onAppInitializedVar;
     FMutex_t             m_mutex;
 
     FSharedPtr<FThread_t> m_worker;
+    OnInputSignal_t m_onInputSignal;
 
     enum Pipe
     {
@@ -180,11 +184,17 @@ public:
     std::atomic_bool m_isRunning;
 
     void setState(ActivityState state);
+    void setInput(AInputQueue* input);
+    void setWindow(ANativeWindow* window);
 
     FArray<std::function<void()>> processHandlers;
 
     static void onStart(ANativeActivity* act);
-    static void onInputCreated(AInputQueue* input);
+    static void onInputCreated(ANativeActivity* act, AInputQueue* input);
+    static void onInputDestroyed(ANativeActivity* act, AInputQueue* input);
+    static void onWindowCreated(ANativeActivity* act, ANativeWindow* window);
+
+    FSignals::connection attachOnInputSignal(const OnInputSignal_t::slot_type& slot);
 
     void writeCmd(int8_t cmd);
 };

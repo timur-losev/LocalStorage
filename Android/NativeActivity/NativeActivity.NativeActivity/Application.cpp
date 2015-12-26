@@ -37,7 +37,7 @@ void Application::appEntry()
 
     while (true)
     {
-
+        updateInvoker();
 
         int ident, events;
 
@@ -45,7 +45,6 @@ void Application::appEntry()
         {
             processHandlers[ident - 1]();
         }
-
 
     }
 }
@@ -57,7 +56,19 @@ void Application::processCmd()
 
 void Application::processInput()
 {
+    AInputEvent* event = nullptr;
+    while (AInputQueue_getEvent(m_inputQueue, &event) >= 0)
+    {
+        //LOGV("New input event: type=%d\n", AInputEvent_getType(event));
+        if (AInputQueue_preDispatchEvent(m_inputQueue, event))
+        {
+            continue;
+        }
 
+        boost::optional<bool> handled = m_onInputSignal(event);
+
+        AInputQueue_finishEvent(m_inputQueue, event, handled ? 1 : 0);
+    }
 }
 
 bool Application::initialize()
@@ -83,7 +94,89 @@ void Application::destroy()
 
 void Application::setState(ActivityState state)
 {
-    m_activityState.store(state, std::memory_order_relaxed);
+    if (needInvoke())
+    {
+        performCrossThreadCall(std::bind(&Application::setState, this, state), this, true);
+    }
+    else
+    {
+        m_activityState.store(state, std::memory_order_relaxed);
+    }
+}
+
+void Application::setInput(AInputQueue* input)
+{
+    if (needInvoke())
+    {
+        performCrossThreadCall(std::bind(&Application::setInput, this, input), this, true);
+    }
+    else
+    {
+        if (m_inputQueue)
+        {
+            AInputQueue_detachLooper(m_inputQueue);
+        }
+
+        m_inputQueue = input;
+
+        if (m_inputQueue)
+        {
+            AInputQueue_attachLooper(m_inputQueue,
+                m_looper, LooperIdInput, nullptr, nullptr);
+        }
+    }
+}
+
+void Application::setWindow(ANativeWindow* window)
+{
+    if (needInvoke())
+    {
+        performCrossThreadCall(std::bind(&Application::setWindow, this, window), this, true);
+    }
+    else
+    {
+        m_window = window;
+
+        EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+
+        eglInitialize(display, nullptr, nullptr);
+
+        const EGLint attribs[] =
+        {
+            EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+            EGL_BLUE_SIZE, 8,
+            EGL_GREEN_SIZE, 8,
+            EGL_RED_SIZE, 8,
+            EGL_NONE
+        };
+
+        EGLint w, h, format;
+        EGLint numConfigs;
+        EGLConfig config;
+        EGLSurface surface;
+        EGLContext context;
+
+        eglChooseConfig(display, attribs, &config, 1, &numConfigs);
+        eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
+
+        ANativeWindow_setBuffersGeometry(m_window, 0, 0, format);
+
+        surface = eglCreateWindowSurface(display, config, m_window, nullptr);
+
+        const EGLint contextAttribs[] = 
+        {
+            EGL_CONTEXT_CLIENT_VERSION, 2,
+            EGL_NONE
+        };
+
+        context = eglCreateContext(display, config, nullptr, contextAttribs);
+
+        if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE)
+        {
+            //LOGW("Unable to eglMakeCurrent");
+            return;
+        }
+    }
 }
 
 void Application::onStart(ANativeActivity* act)
@@ -91,9 +184,24 @@ void Application::onStart(ANativeActivity* act)
     Application::getRef().setState(StateStart);
 }
 
-void Application::onInputCreated(AInputQueue* input)
+void Application::onInputCreated(ANativeActivity* act, AInputQueue* input)
 {
+    Application::getRef().setInput(input);
+}
 
+void Application::onInputDestroyed(ANativeActivity* act, AInputQueue* input)
+{
+    Application::getRef().setInput(nullptr);
+}
+
+void Application::onWindowCreated(ANativeActivity* act, ANativeWindow* window)
+{
+    Application::getRef().setWindow(window);
+}
+
+FSignals::connection Application::attachOnInputSignal(const OnInputSignal_t::slot_type& slot)
+{
+    return m_onInputSignal.connect(slot);
 }
 
 void Application::writeCmd(int8_t cmd)
@@ -121,8 +229,6 @@ void ANativeActivity_onCreate(ANativeActivity* activity,
 //     activity->callbacks->onWindowFocusChanged = onWindowFocusChanged;
 //     activity->callbacks->onNativeWindowCreated = onNativeWindowCreated;
 //     activity->callbacks->onNativeWindowDestroyed = onNativeWindowDestroyed;
-//     activity->callbacks->onInputQueueCreated = onInputQueueCreated;
-//     activity->callbacks->onInputQueueDestroyed = onInputQueueDestroyed;
 // 
 //     activity->instance = android_app_create(activity, savedState, savedStateSize);
 
@@ -133,6 +239,9 @@ void ANativeActivity_onCreate(ANativeActivity* activity,
         activity->instance = app;
 
         activity->callbacks->onStart = Application::onStart;
+        activity->callbacks->onInputQueueCreated = Application::onInputCreated;
+        activity->callbacks->onInputQueueDestroyed = Application::onInputDestroyed;
+        activity->callbacks->onNativeWindowCreated = Application::onWindowCreated;
     }
 }
 
